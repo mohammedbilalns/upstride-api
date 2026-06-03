@@ -14,7 +14,7 @@ export type MentorForFeed = {
 };
 const ONE_DAY_IN_MS = 1000 * 60 * 60 * 24;
 
-export function computeArticleScore(
+function computeArticleScore(
 	article: ArticleForFeed,
 	userInterests: string[],
 ): number {
@@ -28,10 +28,7 @@ export function computeArticleScore(
 	return matchCount * 5 + viewScore + recentnessBoost;
 }
 
-export function computeMentorScore(
-	mentor: MentorForFeed,
-	userInterests: string[],
-) {
+function computeMentorScore(mentor: MentorForFeed, userInterests: string[]) {
 	const matchCount = mentor.interests.filter((interest) =>
 		userInterests.includes(interest),
 	).length;
