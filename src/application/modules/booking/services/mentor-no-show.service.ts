@@ -7,8 +7,6 @@ import { TYPES } from "../../../../shared/types/types";
 import type { ICreateNotificationUseCase } from "../../../modules/notification/use-cases/create-notification.use-case.interface";
 import { REFRESH_TOKEN_EXPIRES_IN_SECONDS } from "../../../services";
 
-export const MAX_SKIPPED_SESSIONS = 2;
-
 @injectable()
 export class MentorNoShowService {
 	constructor(

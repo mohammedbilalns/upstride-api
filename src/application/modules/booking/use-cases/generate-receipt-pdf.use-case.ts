@@ -8,10 +8,7 @@ import type {
 } from "../dtos/reciept.dto";
 import { BookingNotFoundError } from "../errors/booking.errors";
 import { BookingMapper } from "../mappers/booking.mapper";
-
-export interface IGenerateReceiptPdfUseCase {
-	execute(input: GenerateReceiptPdfInput): Promise<GenerateReceiptPdfResponse>;
-}
+import type { IGenerateReceiptPdfUseCase } from "./generate-receipt-pdf.use-case.interface";
 
 @injectable()
 export class GenerateReceiptPdfUseCase implements IGenerateReceiptPdfUseCase {

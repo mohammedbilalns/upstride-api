@@ -1,5 +1,5 @@
 import type { Response } from "express";
-import type { HttpStatus } from "../../../shared/constants/http-status-codes";
+import { HttpStatus } from "../../../shared/constants/http-status-codes";
 
 interface SuccessResponse<T> {
 	success: true;
@@ -20,7 +20,7 @@ export const sendSuccess = <T>(
 	const { message, data } = options;
 
 	// Handle 204 No Content
-	if (statusCode === 204) {
+	if (statusCode === HttpStatus.NO_CONTENT) {
 		return res.status(statusCode).send();
 	}
 
