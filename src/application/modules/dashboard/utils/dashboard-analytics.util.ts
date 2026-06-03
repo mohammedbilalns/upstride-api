@@ -74,12 +74,6 @@ export type DashboardBookingRecord = {
 	updatedAt: Date;
 };
 
-export const DASHBOARD_EXCLUDED_BOOKING_STATUSES: BookingStatus[] = [
-	"CANCELLED_BY_MENTEE",
-	"CANCELLED_BY_MENTOR",
-	"SLOT_TAKEN_BY_ANOTHER_USER",
-];
-
 const getMentorCommissionPercentage = (): number =>
 	Math.max(0, 100 - PLATFOM_COMMISSION.SESSION_PERCENTAGE);
 
@@ -121,17 +115,6 @@ export type DashboardSavedMentorRecord = {
 export type DashboardSessionRecord = {
 	createdAt?: Date;
 	lastUsedAt?: Date;
-};
-
-export type DashboardArticleRecord = {
-	_id: string;
-	slug: string;
-	title: string;
-	description: string;
-	featuredImageUrl: string;
-	views: number;
-	createdAt: Date;
-	authorId: string;
 };
 
 export type DashboardArticleViewRecord = {
@@ -205,7 +188,7 @@ const getBucketLabel = (date: Date, period: DashboardPeriod): string => {
 	return dayLabelFormatter.format(date);
 };
 
-export const buildBuckets = (
+const buildBuckets = (
 	period: DashboardPeriod,
 	now: Date = new Date(),
 ): DashboardBucket[] => {

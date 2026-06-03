@@ -8,11 +8,6 @@ export interface AdminDashboardMetricDto {
 	changePercent: number;
 }
 
-export interface AdminDashboardSparklineDto {
-	labels: string[];
-	values: number[];
-}
-
 export interface AdminDashboardUserGrowthPointDto {
 	label: string;
 	users: number;
