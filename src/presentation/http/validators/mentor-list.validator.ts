@@ -6,7 +6,7 @@ export const MentorListIdParamSchema = z.object({
 });
 export type MentorListIdParam = z.infer<typeof MentorListIdParamSchema>;
 
-export const MentorIdParamSchema = z.object({
+const MentorIdParamSchema = z.object({
 	mentorId: objectIdSchema,
 });
 export type MentorIdParam = z.infer<typeof MentorIdParamSchema>;

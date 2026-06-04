@@ -106,14 +106,6 @@ export const PaymentResponseMessages = {
 	INVALID_WEBHOOK_PAYLOAD: "Invalid webhook payload",
 };
 
-export const PlatformSettingsResponseMessages = {
-	SETTINGS_FETCHED_SUCCESS: "Platform settings fetched successfully",
-	ECONOMY_UPDATED_SUCCESS: "Economy settings updated successfully",
-	MENTORS_UPDATED_SUCCESS: "Mentor settings updated successfully",
-	CONTENT_UPDATED_SUCCESS: "Content settings updated successfully",
-	SESSIONS_UPDATED_SUCCESS: "Session settings updated successfully",
-};
-
 export const CatalogResponseMessages = {
 	CATALOG_FETCHED_SUCCESS: "Catalog fetched successfully",
 	INTEREST_ADDED_SUCCESS: "Interest added successfully",

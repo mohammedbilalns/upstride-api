@@ -5,9 +5,3 @@ export class AdminOnlyReportActionError extends ValidationError {
 		super(`Only admins can ${action}`);
 	}
 }
-
-export class ReporterRoleError extends ValidationError {
-	constructor(target: "articles" | "users") {
-		super(`Only users and mentors can report ${target}`);
-	}
-}

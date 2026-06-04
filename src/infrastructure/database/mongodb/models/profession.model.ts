@@ -7,7 +7,7 @@ export interface ProfessionDocument {
 	isActive: boolean;
 }
 
-export const professionSchema = new Schema<ProfessionDocument>(
+const professionSchema = new Schema<ProfessionDocument>(
 	{
 		name: { type: String, required: true, unique: true },
 		slug: { type: String, required: true, unique: true },

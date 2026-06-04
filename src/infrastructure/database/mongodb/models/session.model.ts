@@ -16,7 +16,7 @@ export interface SessionDocument {
 	jti?: string;
 }
 
-export const SessionSchema = new Schema<SessionDocument>(
+const SessionSchema = new Schema<SessionDocument>(
 	{
 		userId: { type: Schema.Types.ObjectId, required: true, ref: "User" },
 		sid: { type: String, required: true, unique: true },

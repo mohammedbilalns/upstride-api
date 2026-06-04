@@ -22,7 +22,7 @@ export const toMonetaryBookingAmount = (
 		? booking.totalAmount / COIN_VALUE
 		: booking.totalAmount;
 
-export const isOutstandingUpcomingBooking = (
+const isOutstandingUpcomingBooking = (
 	booking: Pick<
 		EffectiveRevenueBookingLike,
 		"status" | "paymentStatus" | "endTime"

@@ -12,12 +12,10 @@ import { getUtcRangeForIstDate } from "../../../../shared/utilities/time.util";
 import type {
 	DashboardActivityItemDto,
 	DashboardActivityOverviewDto,
-	DashboardArticleDto,
 	DashboardGrowthMetric,
 	DashboardPeriod,
 	DashboardRole,
 	DashboardTopCategoryDto,
-	DashboardUpcomingSessionDto,
 } from "../dtos/dashboard.dto";
 
 const IST_TIME_ZONE = "Asia/Kolkata";
@@ -249,7 +247,7 @@ const buildBuckets = (
 	return buckets;
 };
 
-export const calculateGrowth = (
+const calculateGrowth = (
 	current: number,
 	previous: number,
 ): DashboardGrowthMetric => {
@@ -304,38 +302,6 @@ export const countUpcomingBookings = (
 			["PENDING", "CONFIRMED", "STARTED"].includes(booking.status)
 		);
 	}).length;
-
-export const buildUpcomingSessions = (
-	bookings: DashboardBookingRecord[],
-	role: DashboardRole,
-	now: Date = new Date(),
-	limit = 2,
-): DashboardUpcomingSessionDto[] =>
-	bookings
-		.filter((booking) => {
-			const endTime = new Date(booking.endTime).getTime();
-			return (
-				endTime > now.getTime() &&
-				booking.paymentStatus !== "FAILED" &&
-				["PENDING", "CONFIRMED", "STARTED"].includes(booking.status)
-			);
-		})
-		.sort(
-			(a, b) =>
-				new Date(a.startTime).getTime() - new Date(b.startTime).getTime(),
-		)
-		.slice(0, limit)
-		.map((booking) => ({
-			id: booking._id,
-			startTime: new Date(booking.startTime).toISOString(),
-			endTime: new Date(booking.endTime).toISOString(),
-			status: booking.status,
-			paymentStatus: booking.paymentStatus,
-			mentorName: role === "USER" ? getMentorName(booking.mentorId) : null,
-			menteeName: role === "MENTOR" ? getMenteeName(booking.menteeId) : null,
-			totalAmount: booking.totalAmount,
-			currency: booking.currency,
-		}));
 
 export const buildActivityOverview = (
 	bookings: DashboardBookingRecord[],
@@ -427,21 +393,13 @@ export const calculateLoginStreak = (
 	return streak;
 };
 
-export const getBookingMentorId = (booking: DashboardBookingRecord): string => {
+const getBookingMentorId = (booking: DashboardBookingRecord): string => {
 	const mentorId = booking.mentorId;
 	if (typeof mentorId === "string") {
 		return mentorId;
 	}
 	return normalizeId(mentorId._id);
 };
-
-export const getBookingMentorName = (
-	booking: DashboardBookingRecord,
-): string | null => getMentorName(booking.mentorId);
-
-export const getBookingMenteeName = (
-	booking: DashboardBookingRecord,
-): string | null => getMenteeName(booking.menteeId);
 
 export const getMentorName = (
 	mentorId: DashboardBookingRecord["mentorId"],
@@ -461,7 +419,7 @@ export const getMenteeName = (
 	return menteeId.name ?? null;
 };
 
-export const getMentorCategories = (
+const getMentorCategories = (
 	booking: DashboardBookingRecord,
 ): Array<{ id: string; name: string }> => {
 	if (typeof booking.mentorId === "string") {
@@ -576,28 +534,6 @@ export const buildHoursGrowth = (
 	return calculateGrowth(currentHours, previousHours);
 };
 
-export const mapRecommendedArticle = (article: {
-	_id?: string;
-	id?: string;
-	slug: string;
-	title: string;
-	description: string;
-	featuredImageUrl: string;
-	views: number;
-	createdAt: Date | string | null;
-}): DashboardArticleDto => ({
-	id: article._id ?? article.id ?? "",
-	slug: article.slug,
-	title: article.title,
-	description: article.description,
-	featuredImageUrl: article.featuredImageUrl,
-	views: article.views,
-	createdAt:
-		article.createdAt instanceof Date
-			? article.createdAt.toISOString()
-			: new Date(article.createdAt ?? Date.now()).toISOString(),
-});
-
 export const mapRecentActivityBooking = (
 	booking: DashboardBookingRecord,
 	role: DashboardRole,
@@ -624,27 +560,6 @@ export const mapRecentActivityBooking = (
 	};
 };
 
-export const mapRecentActivitySavedMentor = (
-	record: DashboardSavedMentorRecord,
-): DashboardActivityItemDto => {
-	const mentorName =
-		typeof record.mentorId === "string"
-			? "mentor"
-			: (record.mentorId.userId?.name ?? "mentor");
-	const listName =
-		typeof record.listId === "string"
-			? "mentor list"
-			: (record.listId.name ?? "mentor list");
-
-	return {
-		id: `${record._id}:SAVED_MENTOR`,
-		type: "SAVED_MENTOR",
-		title: `Saved ${mentorName} to ${listName}`,
-		description: `Saved mentor activity`,
-		occurredAt: record.createdAt.toISOString(),
-	};
-};
-
 export const sortRecentActivity = (
 	items: DashboardActivityItemDto[],
 	limit = 3,
@@ -661,13 +576,4 @@ export const getMonthRangeForNow = (
 ): { start: Date; end: Date } => {
 	const { year, month } = getIstParts(now);
 	return getUtcRangeForIstMonth(year, month - 1);
-};
-
-export const getPreviousMonthRangeForNow = (
-	now: Date = new Date(),
-): { start: Date; end: Date } => {
-	const { year, month } = getIstParts(now);
-	const previousMonth = month === 1 ? 12 : month - 1;
-	const previousYear = month === 1 ? year - 1 : year;
-	return getUtcRangeForIstMonth(previousYear, previousMonth - 1);
 };

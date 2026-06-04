@@ -1,4 +1,4 @@
-export const MentorLanguageMap = {
+const MentorLanguageMap = {
 	en: "English",
 	hi: "Hindi",
 	ar: "Arabic",

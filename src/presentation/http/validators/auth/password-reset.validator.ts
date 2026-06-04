@@ -6,7 +6,7 @@ export const PasswordResetBodySchema = z.object({
 
 export type PasswordResetBody = z.infer<typeof PasswordResetBodySchema>;
 
-export const ResendPasswordResetBodySchema = z.object({
+const ResendPasswordResetBodySchema = z.object({
 	email: z.email().trim(),
 });
 

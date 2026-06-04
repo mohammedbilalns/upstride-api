@@ -37,12 +37,6 @@ export class SlotNotAvailableError extends ConflictError {
 	}
 }
 
-export class MentorAvailabilityNotVisibleError extends ApplicationError {
-	constructor() {
-		super("Mentor availability is not public", HttpStatus.FORBIDDEN);
-	}
-}
-
 export class AvailabilityNotFoundError extends NotFoundError {
 	constructor() {
 		super("Availability rule not found");
@@ -62,11 +56,5 @@ export class SessionTooEarlyError extends ConflictError {
 		message: string = "Session has not started yet. You can join 5 minutes before the start time.",
 	) {
 		super(message);
-	}
-}
-
-export class BookingNotConfirmedError extends ConflictError {
-	constructor() {
-		super("Only confirmed bookings can be rescheduled");
 	}
 }

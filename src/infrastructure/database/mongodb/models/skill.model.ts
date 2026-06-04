@@ -10,7 +10,7 @@ export interface SkillDocument {
 	updatedAt: Date;
 }
 
-export const skillSchema = new Schema<SkillDocument>(
+const skillSchema = new Schema<SkillDocument>(
 	{
 		name: { type: String, required: true, unique: true },
 		slug: { type: String, required: true, unique: true },

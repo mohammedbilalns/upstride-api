@@ -7,7 +7,7 @@ export interface BreakTime {
 	endTime: string;
 }
 
-export const Day = [
+const Day = [
 	"Monday",
 	"Tuesday",
 	"Wednesday",
@@ -18,7 +18,7 @@ export const Day = [
 ] as const;
 export type Day = (typeof Day)[number];
 
-export const SlotDuration = [30, 60] as const;
+const SlotDuration = [30, 60] as const;
 export type SlotDuration = (typeof SlotDuration)[number];
 
 export class Availability {
