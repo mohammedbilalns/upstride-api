@@ -93,34 +93,12 @@ export const getBookingPlatformFeeCoins = (
 	booking: DashboardBookingRecord,
 ): number => getBookingGrossCoins(booking) - getBookingMentorNetCoins(booking);
 
-export type DashboardSavedMentorRecord = {
-	_id: string;
-	mentorId:
-		| string
-		| {
-				_id?: IdLike;
-				userId?: { _id?: IdLike; name?: string; profilePictureId?: string };
-		  };
-	listId:
-		| string
-		| {
-				_id?: IdLike;
-				name?: string;
-		  };
-	createdAt: Date;
-};
-
 export type DashboardSessionRecord = {
 	createdAt?: Date;
 	lastUsedAt?: Date;
 };
 
-export type DashboardArticleViewRecord = {
-	articleId: string;
-	userId: string;
-};
-
-export interface DashboardBucket {
+interface DashboardBucket {
 	key: string;
 	label: string;
 	start: Date;

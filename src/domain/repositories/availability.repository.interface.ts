@@ -5,11 +5,6 @@ import type {
 	UpdatableByIdRepository,
 } from "./capabilities";
 
-export type AvailabilityFilter = {
-	mentorId: string;
-	date?: string;
-};
-
 export interface IAvailabilityRepository
 	extends CreatableRepository<Availability>,
 		FindByIdRepository<Availability>,

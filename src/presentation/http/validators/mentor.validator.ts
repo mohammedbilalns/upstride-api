@@ -100,8 +100,6 @@ export const RegisterMentorSchema = z.object({
 	experience: BuildExperienceSchema(),
 });
 
-export type RegisterMentorBody = z.infer<typeof RegisterMentorSchema>;
-
 export const ResubmitMentorSchema = z.object({
 	bio: z.string().min(10, "Bio must be at least 10 characters long").optional(),
 	currentRoleId: z.string().min(1, "Current role is required").optional(),
@@ -135,8 +133,6 @@ export const ResubmitMentorSchema = z.object({
 		.optional(),
 	experience: BuildExperienceSchema().optional(),
 });
-
-export type ResubmitMentorBody = z.infer<typeof ResubmitMentorSchema>;
 
 export const MentorApplicationsQuerySchema = z.object({
 	page: pageSchema,

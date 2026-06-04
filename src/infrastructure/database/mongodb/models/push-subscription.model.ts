@@ -1,6 +1,6 @@
 import { model, Schema, type Types } from "mongoose";
 
-export interface PushSubscriptionDocument {
+interface PushSubscriptionDocument {
 	userId: Types.ObjectId;
 	endpoint: string;
 	keys: {

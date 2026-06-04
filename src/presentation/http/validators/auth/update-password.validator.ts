@@ -5,5 +5,3 @@ export const UpdatePasswordBodySchema = z.object({
 	email: z.email().trim(),
 	newPassword: passwordSchema,
 });
-
-export type UpdatePasswordBody = z.infer<typeof UpdatePasswordBodySchema>;
