@@ -2,32 +2,33 @@ import pino from "pino";
 import env from "../config/env";
 import { RequestContext } from "../context/request-context";
 
-console.log(env.LOKI_USER);
+const hasLokiConfig = Boolean(
+	env.LOKI_HOST && env.LOKI_USER && env.LOKI_PASSWORD,
+);
 
-/**
- * Pino transport pipeline.
- *
- * two targets:
- *  - console output
- *  - Loki transport
- */
-const transport = pino.transport({
-	targets: [
-		//  Console output using pino pretty
-		{
-			target: "pino-pretty",
-			level: env.LOG_LEVEL,
-			options: {
-				colorize: true,
-				translateTime: "SYS:yyyy-mm-dd HH:MM:ss",
-				ignore: "pid,hostname",
-			},
-		},
+const transport = (() => {
+	if (env.NODE_ENV === "development") {
+		try {
+			return pino.transport({
+				target: "pino-pretty",
+				options: {
+					colorize: true,
+					translateTime: "SYS:yyyy-mm-dd HH:MM:ss",
+					ignore: "pid,hostname",
+				},
+			});
+		} catch {
+			return undefined;
+		}
+	}
 
-		// Loki transport
-		{
+	if (!hasLokiConfig) {
+		return undefined;
+	}
+
+	try {
+		return pino.transport({
 			target: "pino-loki",
-			level: env.LOG_LEVEL,
 			options: {
 				batching: true,
 				interval: 5,
@@ -37,13 +38,15 @@ const transport = pino.transport({
 					username: env.LOKI_USER,
 					password: env.LOKI_PASSWORD,
 				},
-				debugDiagnostics: env.NODE_ENV === "development",
+				debugDiagnostics: false,
 				labels: { app: "upstride-backend", env: env.NODE_ENV },
 				format: true,
 			},
-		},
-	],
-});
+		});
+	} catch {
+		return undefined;
+	}
+})();
 
 const logger = pino(
 	{
