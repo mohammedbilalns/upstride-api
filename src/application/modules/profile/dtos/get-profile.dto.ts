@@ -2,17 +2,10 @@ import type {
 	AuthType,
 	UserRole,
 } from "../../../../domain/entities/user.entity";
-import type {
-	PopulatedInterest,
-	PopulatedSkill,
-	UserWithPopulatedPreferences,
-} from "../../../../domain/entities/user-preferences.entity";
 
 export interface GetProfileInput {
 	userId: string;
 }
-
-export type { PopulatedInterest, PopulatedSkill, UserWithPopulatedPreferences };
 
 export interface UserProfileDTO {
 	id: string;

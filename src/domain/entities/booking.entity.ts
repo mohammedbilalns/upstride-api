@@ -1,6 +1,6 @@
 import { EntityValidationError } from "../errors";
 
-export const BookingStatus = [
+const BookingStatus = [
 	"CANCELLED_BY_MENTEE",
 	"CANCELLED_BY_MENTOR",
 	"CONFIRMED",
@@ -11,15 +11,10 @@ export const BookingStatus = [
 ] as const;
 export type BookingStatus = (typeof BookingStatus)[number];
 
-export const PaymentType = ["COINS", "STRIPE"] as const;
+const PaymentType = ["COINS", "STRIPE"] as const;
 export type PaymentType = (typeof PaymentType)[number];
 
-export const PaymentStatus = [
-	"PENDING",
-	"COMPLETED",
-	"FAILED",
-	"REFUNDED",
-] as const;
+const PaymentStatus = ["PENDING", "COMPLETED", "FAILED", "REFUNDED"] as const;
 export type PaymentStatus = (typeof PaymentStatus)[number];
 
 type CreateBookingData = {

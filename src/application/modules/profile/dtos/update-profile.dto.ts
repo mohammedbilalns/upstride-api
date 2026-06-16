@@ -5,8 +5,3 @@ export interface UpdateProfileInput {
 	interests?: string[];
 	skills?: string[];
 }
-
-export interface UpdateProfileOutput {
-	success: boolean;
-	message: string;
-}

@@ -30,7 +30,7 @@ export interface UserDocument {
 	updatedAt: Date;
 }
 
-export const userSchema = new Schema<UserDocument>(
+const userSchema = new Schema<UserDocument>(
 	{
 		name: { type: String, required: true },
 		email: { type: String, required: true, unique: true },

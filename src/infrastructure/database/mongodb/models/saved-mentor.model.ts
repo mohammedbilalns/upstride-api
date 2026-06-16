@@ -8,7 +8,7 @@ export interface SavedMentorDocument {
 	createdAt: Date;
 }
 
-export const savedMentorSchema = new Schema<SavedMentorDocument>(
+const savedMentorSchema = new Schema<SavedMentorDocument>(
 	{
 		userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
 		mentorId: { type: Schema.Types.ObjectId, ref: "Mentor", required: true },

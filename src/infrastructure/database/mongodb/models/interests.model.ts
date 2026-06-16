@@ -9,7 +9,7 @@ export interface InterestDocument {
 	updatedAt: Date;
 }
 
-export const interestsSchema = new Schema<InterestDocument>(
+const interestsSchema = new Schema<InterestDocument>(
 	{
 		name: { type: String, required: true, unique: true },
 		slug: { type: String, required: true, unique: true },

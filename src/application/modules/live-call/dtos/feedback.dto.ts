@@ -5,4 +5,3 @@ type FeedBackInput = {
 };
 
 export type CreateFeedbackInput = FeedBackInput;
-export type UpdateFeedbackInput = FeedBackInput;

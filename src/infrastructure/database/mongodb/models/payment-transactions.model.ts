@@ -21,7 +21,7 @@ export interface PaymentTransactionDocument {
 	updatedAt: Date;
 }
 
-export const paymentTransactionSchema = new Schema<PaymentTransactionDocument>(
+const paymentTransactionSchema = new Schema<PaymentTransactionDocument>(
 	{
 		userId: { type: Schema.Types.ObjectId, required: true, ref: "User" },
 		paymentId: { type: String, required: true },

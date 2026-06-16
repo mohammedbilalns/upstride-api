@@ -13,7 +13,7 @@ export interface CoinTransactionDocument {
 	updatedAt: Date;
 }
 
-export const coinTransactionSchema = new Schema<CoinTransactionDocument>(
+const coinTransactionSchema = new Schema<CoinTransactionDocument>(
 	{
 		userId: { type: Schema.Types.ObjectId, required: true, ref: "User" },
 		amount: { type: Number, required: true },

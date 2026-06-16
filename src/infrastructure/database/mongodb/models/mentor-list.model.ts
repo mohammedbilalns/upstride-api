@@ -9,7 +9,7 @@ export interface MentorListDocument {
 	updatedAt: Date;
 }
 
-export const mentorListSchema = new Schema<MentorListDocument>(
+const mentorListSchema = new Schema<MentorListDocument>(
 	{
 		userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
 		name: { type: String, required: true },

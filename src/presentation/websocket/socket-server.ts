@@ -3,6 +3,8 @@ import { createShardedAdapter } from "@socket.io/redis-adapter";
 import { inject, injectable } from "inversify";
 import type { Redis } from "ioredis";
 import { Server as SocketIOServer } from "socket.io";
+import type { ITokenService } from "../../application/services";
+import type { ITokenRevocationRepository } from "../../domain/repositories/token-revocation.repository.interface";
 import { redisClient } from "../../infrastructure/database/redis/redis.connection";
 import logger from "../../shared/logging/logger";
 import { TYPES } from "../../shared/types/types";
@@ -10,7 +12,7 @@ import { socketIOCorsOptions } from "./config/cors.config";
 import type { CallHandler } from "./handlers/call.handler";
 import {
 	type AuthedSocket,
-	socketAuthMiddleware,
+	createSocketAuthMiddleware,
 } from "./middlewares/socket-auth.middleware";
 
 @injectable()
@@ -21,6 +23,10 @@ export class WebSocketServer {
 	constructor(
 		@inject(TYPES.WebSockets.CallHandler)
 		private readonly _callHandler: CallHandler,
+		@inject(TYPES.Services.TokenService)
+		private readonly _tokenService: ITokenService,
+		@inject(TYPES.Repositories.TokenRevocationRepository)
+		private readonly _tokenRevocationRepository: ITokenRevocationRepository,
 	) {}
 
 	/**
@@ -41,7 +47,12 @@ export class WebSocketServer {
 		// Enable WebSocket messages to be distributed across multiple server instances
 		this._io.adapter(createShardedAdapter(redisClient, this._redisSubClient));
 
-		this._io.use(socketAuthMiddleware);
+		this._io.use(
+			createSocketAuthMiddleware(
+				this._tokenService,
+				this._tokenRevocationRepository,
+			),
+		);
 
 		this._setupHandlers();
 

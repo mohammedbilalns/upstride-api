@@ -11,11 +11,6 @@ export const UserPreferencesLimits = {
 	MAX_SKILLS_PER_INTEREST: 10,
 } as const;
 
-export const SessionSlotLimits = {
-	MAX_RECURRING_RULE_PER_DAY: 6,
-	MAX_SLOTS_PER_DAY: 6,
-} as const;
-
 export const IST_OFFSET_MINUTES = 330;
 
 export const COIN_VALUE = 2;
