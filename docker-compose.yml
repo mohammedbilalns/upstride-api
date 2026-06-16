@@ -10,7 +10,7 @@ services:
     command: redis-server --save 60 1 --loglevel warning
 
   api:
-    image: ghcr.io/mohammedbilalns/upstride-backend:latest
+    image: ghcr.io/mohammedbilalns/upstride-backend-api:latest
     container_name: upstride-backend
     pull_policy: always
     ports:
@@ -22,10 +22,7 @@ services:
     restart: unless-stopped
 
   worker:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: upstride-backend:latest
+    image: ghcr.io/mohammedbilalns/upstride-backend-worker:latest
     container_name: upstride-backend-worker
     pull_policy: always
     env_file:

@@ -6,7 +6,8 @@ on:
       - main
 
 env:
-  IMAGE_NAME: ghcr.io/${{ github.repository }}
+  API_IMAGE: ghcr.io/mohammedbilalns/upstride-backend-api
+  WORKER_IMAGE: ghcr.io/mohammedbilalns/upstride-backend-worker
 
 jobs:
   deploy:
@@ -27,14 +28,16 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and Push Image
+      - name: Build and Push Images
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
           tags: |
-            ${{ env.IMAGE_NAME }}:latest
-            ${{ env.IMAGE_NAME }}:${{ github.sha }}
+            ${{ env.API_IMAGE }}:latest
+            ${{ env.API_IMAGE }}:${{ github.sha }}
+            ${{ env.WORKER_IMAGE }}:latest
+            ${{ env.WORKER_IMAGE }}:${{ github.sha }}
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.0.3
@@ -44,7 +47,9 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             sudo -u upstride bash -c '
-              cd /opt/upstride
+              cd /opt/upstride/upstride-backend
+
+              echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u "${{ secrets.GHCR_USERNAME }}" --password-stdin
 
               docker compose pull
 
