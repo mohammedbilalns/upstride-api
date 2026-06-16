@@ -32,10 +32,10 @@ RUN addgroup -S app && adduser -S app -G app
 COPY package.json pnpm-lock.yaml ./
 
 # Install ONLY production deps
+ENV HUSKY=0
 RUN pnpm install --prod --frozen-lockfile
 
 # Copy built files
-ENV HUSKY=0
 COPY --from=builder /app/dist ./dist
 
 # Logs dir
