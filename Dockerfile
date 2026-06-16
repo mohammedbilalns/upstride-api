@@ -35,6 +35,7 @@ COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --prod --frozen-lockfile
 
 # Copy built files
+ENV HUSKY=0
 COPY --from=builder /app/dist ./dist
 
 # Logs dir
