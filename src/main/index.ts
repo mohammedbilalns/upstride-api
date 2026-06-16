@@ -17,7 +17,6 @@ let appInstance: App;
 
 async function start() {
 	logger.info("Starting...");
-	logger.info("Running latest change");
 
 	await Promise.all([connectToMongo(), redisClient.ping()]);
 
