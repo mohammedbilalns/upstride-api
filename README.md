@@ -1,8 +1,8 @@
 # Upstride Backend
 
-### Backend API powering the [Upstride](https://upstride.bilalnsmuhammed.in) platform for collaboration, learning, and community-driven communication.
+### Backend API powering the [Upstride](https://upstride.bilalnsmuhammed.in)
 
-Built with **TypeScript**, **Clean Architecture****, and **event-driven patterns** for long-term maintainability, modularity, and scale.
+Built with **TypeScript**, **Clean Architecture****, and **event-driven patterns**
 
 ---
 
