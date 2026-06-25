@@ -1,221 +1,96 @@
 # Upstride Backend
 
-### Backend API powering the [Upstride](https://upstride.bilalnsmuhammed.in)
+Upstride Backend is a scalable backend platform for mentorship and professional networking, built with Node.js, TypeScript, Express, and MongoDB.
 
-Built with **TypeScript**, **Clean Architecture****, and **event-driven patterns**
+It powers a complete mentorship ecosystem with secure authentication, mentor discovery, personalized content feeds, session scheduling, live video call support, payments, wallet management, notifications, and media storage. The application follows a modular Clean Architecture with an event-driven design, enabling maintainable, scalable, and extensible business logic.
 
 ---
 
 ## Features
 
-### Authentication & Security
-
-- Email registration & login
-- Social login (Google)
-- JWT access & refresh sessions
-- OTP verification flows
-- Secure password hashing using [Argon2](https://www.npmjs.com/package/argon2)
-- Session management & token revocation
-
-### Mentorship Platform
-
-- Mentor registration & moderation
-- Mentor discovery
-- Mentor availability scheduling
-- Booking & rescheduling sessions
-- Reviews & ratings
-
-### Real-Time Communication
-
-- One-to-one chat
-- Real-time messaging using [Socket.IO](https://socket.io/)
-- Notifications
-- Live call session handling
-
-### Content Platform
-
-- Article publishing
-- Comments & reactions
-- Reporting & moderation
-
-### Payments & Wallet
-
-- [Stripe](https://stripe.com/) checkout integration
-- Wallet transactions
-- Session settlement
-- Refund handling
-
-### Media & Storage
-
-- Presigned uploads
-- File deletion
-- Media storage using [AWS S3](https://aws.amazon.com/s3/)
-
-### Infrastructure
-
-- [Redis](https://redis.io/) caching
-- Background job processing
-- Worker-based async processing
-- Event bus architecture
-- Dockerized environments
+* User authentication and authorization
+* Mentor profile and discovery
+* Session scheduling and booking
+* Live call session handling
+* Article publishing platform
+* Comments and reactions
+* Content reporting and moderation
+* Stripe payment integration
+* Wallet and transaction management
+* Session settlement and refunds
+* Media uploads with AWS S3
+* Background job processing
+* Redis caching
+* Event-driven architecture
+* Worker-based asynchronous processing
 
 ---
 
 ## Tech Stack
 
-- [Node.js](https://nodejs.org/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Express.js](https://expressjs.com/)
-- [MongoDB](https://www.mongodb.com/)
-- [Mongoose](https://mongoosejs.com/)
-- [InversifyJS](https://inversify.io/)
-- [Zod](https://zod.dev/)
-- [Socket.IO](https://socket.io/)
-- [Redis](https://redis.io/)
-- [Stripe](https://stripe.com/)
-- [AWS S3](https://aws.amazon.com/s3/)
-- [Docker](https://www.docker.com/)
+### Backend
+
+* Node.js
+* TypeScript
+* Express.js
+* MongoDB
+* Mongoose
+* InversifyJS
+* Zod
+* Socket.IO
+* Redis
+* Stripe
+* AWS S3
+
+### Development Tools
+
+* Docker
 
 ---
 
 ## Architecture
 
-This project follows:
-
-- Clean Architecture
-- Domain-Driven Design
-- Repository Pattern
-- Event-Driven Architecture
-- Dependency Injection using [InversifyJS](https://inversify.io/)
-- SOLID Principles
+* Clean Architecture
+* Repository Pattern
+* Event-Driven Architecture
+* Dependency Injection
+* SOLID Principles
 
 ---
 
 ## Project Structure
 
-```bash
-.
-├── src
-│   ├── application
-│   │   ├── modules
-│   │   ├── events
-│   │   ├── services
-│   │   └── ports
+```text
+upstride-api/
+├── src/
+│   ├── application/
+│   │   ├── events/
+│   │   ├── modules/
+│   │   ├── ports/
+│   │   └── services/
 │   │
-│   ├── domain
-│   │   ├── entities
-│   │   ├── repositories
-│   │   ├── events
-│   │   └── policies
+│   ├── domain/
+│   │   ├── entities/
+│   │   ├── events/
+│   │   ├── policies/
+│   │   └── repositories/
 │   │
-│   ├── infrastructure
-│   │   ├── database
-│   │   ├── cache
-│   │   ├── queue
-│   │   │   └── workers
-│   │   ├── notifications
-│   │   ├── services
-│   │   └── mail
+│   ├── infrastructure/
+│   │   ├── cache/
+│   │   ├── database/
+│   │   ├── mail/
+│   │   ├── notifications/
+│   │   ├── queue/
+│   │   │   └── workers/
+│   │   └── services/
 │   │
-│   └── main
-│       ├── di
+│   └── main/
 │       ├── app.ts
+│       ├── di/
 │       └── worker.ts
+│
+├── docker-compose.dev.yml
+├── docker-compose.yml
+├── package.json
+└── README.md
 ```
-
----
-
-## Installation
-
-Clone repository:
-
-```bash
-git clone https://github.com/mohammedbilalns/upstride-backend.git
-cd upstride-backend
-```
-
-Install dependencies:
-
-```bash
-pnpm install
-```
-
----
-
-## Environment Setup
-
-Environment variables are already provided in:
-
-```bash
-.env.example
-```
-
-Create your local environment:
-
-```bash
-cp .env.example .env
-```
-
----
-
-## Running with Docker
-
-Development:
-
-```bash
-docker compose -f docker-compose.dev.yml up
-```
-
-Production:
-
-```bash
-docker compose up
-```
-
----
-
-## Running Locally
-
-API Server:
-
-```bash
-pnpm dev
-```
-
-Background Workers:
-
-```bash
-pnpm worker
-```
-
-Build:
-
-```bash
-pnpm build
-```
-
-Start Production:
-
-```bash
-pnpm start
-```
-
----
-
-## Database Seeding
-
-Available scripts:
-
-```bash
-pnpm seed:users
-pnpm seed:skills
-pnpm seed:interests
-pnpm seed:professions
-pnpm seed:superadmin
-```
-
----
-
-## License
-
-MIT
