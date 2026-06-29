@@ -35,7 +35,6 @@ const envSchema = z.object({
 	VAPID_PRIVATE_KEY: z.string().min(1),
 	VAPID_PUBLIC_KEY: z.string().min(1),
 	DUMMY_LOGIN_EMAIL: z.string().min(1),
-	DUMMY_LOGIN_PASSWORD: z.string().min(1),
 });
 
 const env = envSchema.parse(process.env);
