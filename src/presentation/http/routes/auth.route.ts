@@ -37,6 +37,8 @@ router.post(
 	authController.login,
 );
 
+router.post(ROUTES.AUTH.DUMMY_LOGIN, authController.dummyLogin);
+
 router.post(
 	ROUTES.AUTH.GOOGLE,
 	ensureCsrfSessionId,
