@@ -11,7 +11,7 @@ export class DummyLoginUseCase implements IDummyLoginUseCase {
 	constructor(
 		@inject(TYPES.Repositories.UserRepository)
 		private readonly _userRepository: IUserRepository,
-    @inject(TYPES.Services.AuthSession)
+		@inject(TYPES.Services.AuthSession)
 		private readonly _authSessionService: IAuthSessionService,
 	) {}
 
