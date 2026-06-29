@@ -9,6 +9,7 @@ import type {
 	ISocialLoginUseCase,
 	IVerifyRegistrationOtpUseCase,
 } from "../../../application/modules/authentication/use-cases";
+import type { IDummyLoginUseCase } from "../../../application/modules/authentication/use-cases/login/dummy-login.use-case.interface";
 import env from "../../../shared/config/env";
 import { HttpStatus } from "../../../shared/constants";
 import { TYPES } from "../../../shared/types/types";
@@ -43,6 +44,8 @@ export class AuthController {
 		private _refreshSessionUseCase: IRefreshSessionUseCase,
 		@inject(TYPES.UseCases.SaveUserInterests)
 		private _saveUserInterestsUseCase: ISaveUserInterestsUseCase,
+		@inject(TYPES.UseCases.DummyLogin)
+		private _dummyLoginUseCase: IDummyLoginUseCase,
 	) {}
 
 	register = asyncHandler(async (req, res) => {
@@ -85,6 +88,18 @@ export class AuthController {
 				...deviceInfo,
 			},
 		);
+
+		this._setRefreshTokenCookie(res, refreshToken);
+		req.cookies.refreshToken = refreshToken;
+		const csrfToken = generateCsrfToken(req, res);
+		sendSuccess(res, HttpStatus.OK, {
+			message: AuthResponseMessages.LOGIN_SUCCESS,
+			data: { ...data, csrfToken },
+		});
+	});
+
+	dummyLogin = asyncHandler(async (req, res) => {
+		const { refreshToken, ...data } = await this._dummyLoginUseCase.execute();
 
 		this._setRefreshTokenCookie(res, refreshToken);
 		req.cookies.refreshToken = refreshToken;
