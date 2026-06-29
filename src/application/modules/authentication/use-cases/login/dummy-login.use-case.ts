@@ -1,5 +1,6 @@
 import { inject } from "inversify";
 import type { IUserRepository } from "../../../../../domain/repositories";
+import env from "../../../../../shared/config/env";
 import { TYPES } from "../../../../../shared/types/types";
 import type { IPasswordService } from "../../../../services";
 import type { LoginResponse } from "../../dtos";
@@ -8,9 +9,6 @@ import type { IAuthSessionService } from "../../services";
 import type { IDummyLoginUseCase } from "./dummy-login.use-case.interface";
 
 export class DummyLoginUseCase implements IDummyLoginUseCase {
-	private readonly DUMMY_EMAIL = "dummy@upstride.com";
-	private readonly DUMMY_PASSWORD = "dummyPassword";
-
 	constructor(
 		@inject(TYPES.Repositories.UserRepository)
 		private readonly _userRepository: IUserRepository,
@@ -22,7 +20,7 @@ export class DummyLoginUseCase implements IDummyLoginUseCase {
 
 	async execute(): Promise<LoginResponse> {
 		const existingDummyAccount = await this._userRepository.findByEmail(
-			this.DUMMY_EMAIL,
+			env.DUMMY_LOGIN_EMAIL,
 		);
 
 		if (!existingDummyAccount) {
@@ -30,7 +28,7 @@ export class DummyLoginUseCase implements IDummyLoginUseCase {
 		}
 
 		const isPasswordCorrect = await this._passwordService.verifyPassword(
-			this.DUMMY_PASSWORD,
+			env.DUMMY_LOGIN_PASSWORD,
 			existingDummyAccount.passwordHash,
 		);
 		if (!isPasswordCorrect) {
