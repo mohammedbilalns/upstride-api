@@ -89,6 +89,7 @@ export const TYPES = {
 	},
 	UseCases: {
 		LoginWithEmail: Symbol.for("LoginWithEmailUseCase"),
+		DummyLogin: Symbol.for("DummyLoginUseCase"),
 		SocialLogin: Symbol.for("SocialLoginUseCase"),
 		RequestPasswordReset: Symbol.for("RequestPasswordResetUseCase"),
 		RegisterWithEmail: Symbol.for("RegisterWithEmailUseCase"),
