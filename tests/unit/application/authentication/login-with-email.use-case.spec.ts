@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import type { LoginResponse } from "../../../../src/application/modules/authentication/dtos";
 import { AuthenticationError } from "../../../../src/application/modules/authentication/errors";
 import type { IAuthSessionService } from "../../../../src/application/modules/authentication/services";
-import { LoginWithEmailUseCase } from "../../../../src/application/modules/authentication/use-cases";
+import { LoginWithEmailUseCase } from "../../../../src/application/modules/authentication/use-cases/login/login-with-email.use-case";
 import type { IPasswordService } from "../../../../src/application/services";
 import type { IUserRepository } from "../../../../src/domain/repositories";
 import { createLoginResponse } from "../../../factories/dtos/login-response.factory";
