@@ -1,0 +1,86 @@
+import {
+	Mentor,
+	type MentorExperience,
+	type MentorSkill,
+} from "../../../src/domain/entities/mentor.entity";
+import { mergeDefaults } from "../utilities/merge-defaults";
+
+export function createMentor(overrides: Partial<Mentor> = {}): Mentor {
+	const data = mergeDefaults<Mentor>(
+		{
+			id: "mentor-1",
+			userId: "user-1",
+			bio: "Experienced software engineer.",
+			currentRoleId: "role-1",
+			organization: "Tech Corp",
+			yearsOfExperience: 5,
+			score: 90,
+			tierName: "Gold",
+			tierMax30minPayment: 3000,
+			currentPricePer30Min: 2000,
+			personalWebsite: "https://example.com",
+			resumeId: "resume-1",
+			educationalQualifications: ["B.Tech Computer Science"],
+			languages: ["English"],
+			areasOfExpertise: ["Backend"],
+			toolsAndSkills: [
+				{
+					skillId: "skill-1",
+					level: "ADVANCED",
+				} satisfies MentorSkill,
+			],
+			experience: [
+				{
+					company: "Tech Corp",
+					role: "Backend Engineer",
+					description: "Built APIs",
+					from: new Date("2020-01-01"),
+					to: null,
+				} satisfies MentorExperience,
+			],
+			isApproved: true,
+			applicationAttempts: 1,
+			skippedSessionsCount: 0,
+			totalSessions: 100,
+			lastSessionAt: null,
+			isRejected: false,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+			rejectionReason: null,
+			avgRating: 4.8,
+			isUserBlocked: false,
+		},
+		overrides,
+	);
+
+	return new Mentor(
+		data.id,
+		data.userId,
+		data.bio,
+		data.currentRoleId,
+		data.organization,
+		data.yearsOfExperience,
+		data.score,
+		data.tierName,
+		data.tierMax30minPayment,
+		data.currentPricePer30Min,
+		data.personalWebsite,
+		data.resumeId,
+		data.educationalQualifications,
+		data.languages,
+		data.areasOfExpertise,
+		data.toolsAndSkills,
+		data.experience,
+		data.isApproved,
+		data.applicationAttempts,
+		data.skippedSessionsCount,
+		data.totalSessions,
+		data.lastSessionAt,
+		data.isRejected,
+		data.createdAt,
+		data.updatedAt,
+		data.rejectionReason,
+		data.avgRating,
+		data.isUserBlocked,
+	);
+}
