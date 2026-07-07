@@ -6,12 +6,29 @@ import { SaveUserInterestsUseCase } from "../../../../src/application/modules/au
 import type { ITokenService } from "../../../../src/application/services";
 import type { IIdGenerator } from "../../../../src/application/services/id-generator.service.interface";
 import type { IStorageService } from "../../../../src/application/services/storage.service.interface";
+import { Session } from "../../../../src/domain/entities/session.entity";
 import type {
 	ISessionRepository,
 	IUserRepository,
 } from "../../../../src/domain/repositories";
 import { createUser } from "../../../factories/entities/user.factory";
 import { createMock } from "../../../factories/utilities/create-mock";
+
+function createMockSession(): Session {
+	return new Session(
+		"",
+		"session-id",
+		"user-1",
+		"hashed-token",
+		new Date(),
+		"127.0.0.1",
+		"test-agent",
+		"test-device",
+		"mobile",
+		false,
+		new Date(),
+	);
+}
 
 describe("SaveUserInterestsUseCase", () => {
 	let userRepository: ReturnType<typeof createMock<IUserRepository>>;
@@ -90,7 +107,7 @@ describe("SaveUserInterestsUseCase", () => {
 		tokenService.generateAccessToken.mockResolvedValue("access-token");
 		tokenService.generateRefreshToken.mockResolvedValue("refresh-token");
 		tokenService.hashToken.mockReturnValue("hashed-refresh-token");
-		sessionRepository.create.mockResolvedValue(undefined);
+		sessionRepository.create.mockResolvedValue(createMockSession());
 		storageService.getPublicUrl.mockReturnValue(
 			"https://example.com/avatar.jpg",
 		);
@@ -141,7 +158,7 @@ describe("SaveUserInterestsUseCase", () => {
 		tokenService.generateAccessToken.mockResolvedValue("access-token");
 		tokenService.generateRefreshToken.mockResolvedValue("refresh-token");
 		tokenService.hashToken.mockReturnValue("hashed-refresh-token");
-		sessionRepository.create.mockResolvedValue(undefined);
+		sessionRepository.create.mockResolvedValue(createMockSession());
 
 		const result = await useCase.execute(input);
 

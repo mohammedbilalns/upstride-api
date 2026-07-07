@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import type { RegisterWithEmailInput } from "../../../../src/application/modules/authentication/dtos";
 import { UserAlreadyExistsError } from "../../../../src/application/modules/authentication/errors";
 import { RegisterWithEmailUseCase } from "../../../../src/application/modules/authentication/use-cases/registration/register-with-email.use-case";
-import type { JobQueuePort } from "../../../../src/application/modules/ports/job-queue.port";
+import type { JobQueuePort } from "../../../../src/application/ports/job-queue.port";
 import type {
 	IOtpGenerator,
 	IPasswordService,

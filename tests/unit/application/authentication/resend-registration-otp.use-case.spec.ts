@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import type { ResendRegistrationOtpInput } from "../../../../src/application/modules/authentication/dtos/otp/resend-registration-otp.dto";
 import { MaxResendsExceededError } from "../../../../src/application/modules/authentication/errors";
 import { ResendRegistrationOtpUseCase } from "../../../../src/application/modules/authentication/use-cases/registration/resend-registration-otp.use-case";
-import type { JobQueuePort } from "../../../../src/application/modules/ports/job-queue.port";
+import type { JobQueuePort } from "../../../../src/application/ports/job-queue.port";
 import type { IOtpGenerator } from "../../../../src/application/services";
 import { UserNotFoundError } from "../../../../src/application/shared/errors/user-not-found.error";
 import type {

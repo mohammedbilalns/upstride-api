@@ -80,7 +80,7 @@ describe("UpdatePasswordUseCase", () => {
 		userRepository.findByEmail.mockResolvedValue(user);
 		tokenService.verifyResetToken.mockResolvedValue({ sub: user.id });
 		passwordService.hashPassword.mockResolvedValue("hashed-new-password");
-		userRepository.updateById.mockResolvedValue(undefined);
+		userRepository.updateById.mockResolvedValue(user);
 
 		await useCase.execute(input);
 

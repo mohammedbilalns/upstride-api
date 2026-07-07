@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import type { RequestPasswordResetInput } from "../../../../src/application/modules/authentication/dtos";
 import { RequestPasswordResetUseCase } from "../../../../src/application/modules/authentication/use-cases/password-reset/request-password-reset.use-case";
-import type { JobQueuePort } from "../../../../src/application/modules/ports/job-queue.port";
+import type { JobQueuePort } from "../../../../src/application/ports/job-queue.port";
 import type { IOtpGenerator } from "../../../../src/application/services";
 import type {
 	IOtpRepository,

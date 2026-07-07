@@ -5,7 +5,7 @@ import {
 	UserNotFoundError,
 } from "../../../../src/application/modules/authentication/errors";
 import { ResendResetPasswordOtpUseCase } from "../../../../src/application/modules/authentication/use-cases/password-reset/resend-reset-password-otp.use-case";
-import type { JobQueuePort } from "../../../../src/application/modules/ports/job-queue.port";
+import type { JobQueuePort } from "../../../../src/application/ports/job-queue.port";
 import type { IOtpGenerator } from "../../../../src/application/services";
 import type {
 	IOtpRepository,
