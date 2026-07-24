@@ -2,6 +2,7 @@ import {
 	PaymentProvider,
 	PaymentStatus,
 	PaymentTransaction,
+	type PaymentTransactionPurpose,
 } from "../../../src/domain/entities/payment-transactions.entity";
 import { mergeDefaults } from "../utilities/merge-defaults";
 
@@ -13,15 +14,15 @@ export function createPaymentTransaction(
 			id: "payment-1",
 			userId: "user-1",
 			provider: PaymentProvider.Stripe,
-			providerPaymentId: "pi_test_123",
-			amount: 1000,
+			providerPaymentId: "stripe-tx-1",
+			amount: 10000,
 			currency: "INR",
 			status: PaymentStatus.Completed,
 			coinsGranted: 100,
 			purpose: "coins",
 			paymentType: "STRIPE",
-			transactionOwner: "user",
 			createdAt: new Date(),
+			transactionOwner: "user",
 		},
 		overrides,
 	);
@@ -35,7 +36,7 @@ export function createPaymentTransaction(
 		data.currency,
 		data.status,
 		data.coinsGranted,
-		data.purpose,
+		data.purpose as PaymentTransactionPurpose,
 		data.paymentType,
 		data.createdAt,
 		data.transactionOwner,
