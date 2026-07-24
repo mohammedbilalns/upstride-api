@@ -1,263 +1,277 @@
 import { describe, expect, it } from "vitest";
-import { Booking } from "../../../../src/domain/entities/booking.entity";
-import { EntityValidationError } from "../../../../src/domain/errors/entity-validation.error";
+import {
+	Booking,
+	type BookingStatus,
+} from "../../../../src/domain/entities/booking.entity";
+import { EntityValidationError } from "../../../../src/domain/errors";
 
 describe("Booking Entity", () => {
-	describe("create static method", () => {
-		it("should throw when mentor equals mentee", () => {
-			const now = new Date();
-			const startTime = new Date(now.getTime() + 3600000).toISOString();
-			const endTime = new Date(now.getTime() + 7200000).toISOString();
-
-			expect(() => {
-				Booking.create({
-					mentorId: "m1",
-					menteeId: "m1",
-					startTime,
-					endTime,
-					meetingLink: "https://meet.example.com",
-					paymentType: "COINS",
-					paymentStatus: "PENDING",
-					totalAmount: 100,
-					currency: "INR",
-				});
-			}).toThrow(EntityValidationError);
-		});
-
-		it("should throw when start time after end time", () => {
-			const now = new Date();
-			const startTime = new Date(now.getTime() + 7200000).toISOString();
-			const endTime = new Date(now.getTime() + 3600000).toISOString();
-
-			expect(() => {
-				Booking.create({
-					mentorId: "m1",
-					menteeId: "u1",
-					startTime,
-					endTime,
-					meetingLink: "https://meet.example.com",
-					paymentType: "COINS",
-					paymentStatus: "PENDING",
-					totalAmount: 100,
-					currency: "INR",
-				});
-			}).toThrow(EntityValidationError);
-		});
-
-		it("should throw when booking in past", () => {
-			const now = new Date();
-			const startTime = new Date(now.getTime() - 7200000).toISOString();
-			const endTime = new Date(now.getTime() - 3600000).toISOString();
-
-			expect(() => {
-				Booking.create({
-					mentorId: "m1",
-					menteeId: "u1",
-					startTime,
-					endTime,
-					meetingLink: "https://meet.example.com",
-					paymentType: "COINS",
-					paymentStatus: "PENDING",
-					totalAmount: 100,
-					currency: "INR",
-				});
-			}).toThrow(EntityValidationError);
-		});
-
+	describe("create", () => {
 		it("should create valid booking", () => {
-			const now = new Date();
-			const startTime = new Date(now.getTime() + 3600000).toISOString();
-			const endTime = new Date(now.getTime() + 7200000).toISOString();
+			const futureDate = new Date();
+			futureDate.setHours(futureDate.getHours() + 2);
+			const endDate = new Date(futureDate);
+			endDate.setHours(endDate.getHours() + 1);
 
 			const booking = Booking.create({
-				mentorId: "m1",
-				menteeId: "u1",
-				startTime,
-				endTime,
-				meetingLink: "https://meet.example.com",
+				mentorId: "mentor-1",
+				menteeId: "mentee-1",
+				startTime: futureDate.toISOString(),
+				endTime: endDate.toISOString(),
+				meetingLink: "https://zoom.us/j/123",
 				paymentType: "COINS",
 				paymentStatus: "PENDING",
 				totalAmount: 100,
-				currency: "INR",
+				currency: "USD",
 			});
 
-			expect((booking as unknown as Record<string, unknown>).mentorId).toBe(
-				"m1",
-			);
-			expect((booking as unknown as Record<string, unknown>).menteeId).toBe(
-				"u1",
-			);
+			expect(booking.mentorId).toBe("mentor-1");
+			expect(booking.menteeId).toBe("mentee-1");
+			expect(booking.paymentType).toBe("COINS");
+		});
+
+		it("should throw when mentor and mentee are same", () => {
+			const futureDate = new Date();
+			futureDate.setHours(futureDate.getHours() + 2);
+			const endDate = new Date(futureDate);
+			endDate.setHours(endDate.getHours() + 1);
+
+			expect(() =>
+				Booking.create({
+					mentorId: "same-id",
+					menteeId: "same-id",
+					startTime: futureDate.toISOString(),
+					endTime: endDate.toISOString(),
+					meetingLink: "https://zoom.us/j/123",
+					paymentType: "COINS",
+					paymentStatus: "PENDING",
+					totalAmount: 100,
+					currency: "USD",
+				}),
+			).toThrow(EntityValidationError);
+		});
+
+		it("should throw when start time is after end time", () => {
+			const futureDate = new Date();
+			futureDate.setHours(futureDate.getHours() + 2);
+			const endDate = new Date(futureDate);
+			endDate.setHours(endDate.getHours() - 1);
+
+			expect(() =>
+				Booking.create({
+					mentorId: "mentor-1",
+					menteeId: "mentee-1",
+					startTime: futureDate.toISOString(),
+					endTime: endDate.toISOString(),
+					meetingLink: "https://zoom.us/j/123",
+					paymentType: "COINS",
+					paymentStatus: "PENDING",
+					totalAmount: 100,
+					currency: "USD",
+				}),
+			).toThrow(EntityValidationError);
+		});
+
+		it("should throw when start time is in the past", () => {
+			const pastDate = new Date();
+			pastDate.setHours(pastDate.getHours() - 1);
+			const endDate = new Date(pastDate);
+			endDate.setHours(endDate.getHours() + 1);
+
+			expect(() =>
+				Booking.create({
+					mentorId: "mentor-1",
+					menteeId: "mentee-1",
+					startTime: pastDate.toISOString(),
+					endTime: endDate.toISOString(),
+					meetingLink: "https://zoom.us/j/123",
+					paymentType: "COINS",
+					paymentStatus: "PENDING",
+					totalAmount: 100,
+					currency: "USD",
+				}),
+			).toThrow(EntityValidationError);
+		});
+
+		it("should throw with invalid date format", () => {
+			expect(() =>
+				Booking.create({
+					mentorId: "mentor-1",
+					menteeId: "mentee-1",
+					startTime: "invalid-date",
+					endTime: "invalid-date",
+					meetingLink: "https://zoom.us/j/123",
+					paymentType: "COINS",
+					paymentStatus: "PENDING",
+					totalAmount: 100,
+					currency: "USD",
+				}),
+			).toThrow(EntityValidationError);
+		});
+
+		it("should create booking with notes", () => {
+			const futureDate = new Date();
+			futureDate.setHours(futureDate.getHours() + 2);
+			const endDate = new Date(futureDate);
+			endDate.setHours(endDate.getHours() + 1);
+
+			const booking = Booking.create({
+				mentorId: "mentor-1",
+				menteeId: "mentee-1",
+				startTime: futureDate.toISOString(),
+				endTime: endDate.toISOString(),
+				meetingLink: "https://zoom.us/j/123",
+				paymentType: "STRIPE",
+				paymentStatus: "COMPLETED",
+				totalAmount: 200,
+				currency: "USD",
+				notes: "Discuss career guidance",
+			});
+
+			expect(booking.notes).toBe("Discuss career guidance");
 		});
 	});
 
-	describe("assertCanBook static method", () => {
-		it("should throw when booker is mentor", () => {
-			expect(() => Booking.assertCanBook("m1", "m1")).toThrow(
+	describe("assertCanBook", () => {
+		it("should throw when booker is same as mentor", () => {
+			expect(() => Booking.assertCanBook("user-1", "user-1")).toThrow(
 				EntityValidationError,
 			);
 		});
 
-		it("should allow when booker is not mentor", () => {
-			expect(() => Booking.assertCanBook("m1", "u1")).not.toThrow();
+		it("should allow booking when booker and mentor are different", () => {
+			expect(() => Booking.assertCanBook("mentee-1", "mentor-1")).not.toThrow();
 		});
 	});
 
-	describe("assertCancellable static method", () => {
-		it("should allow PENDING", () => {
+	describe("assertCancellable", () => {
+		it("should allow cancellation for PENDING booking", () => {
 			expect(() => Booking.assertCancellable("PENDING")).not.toThrow();
 		});
 
-		it("should allow CONFIRMED", () => {
+		it("should allow cancellation for CONFIRMED booking", () => {
 			expect(() => Booking.assertCancellable("CONFIRMED")).not.toThrow();
 		});
 
-		it("should throw for COMPLETED", () => {
-			expect(() => Booking.assertCancellable("COMPLETED")).toThrow(
-				EntityValidationError,
-			);
+		it("should throw for COMPLETED booking", () => {
+			expect(() =>
+				Booking.assertCancellable("COMPLETED" as BookingStatus),
+			).toThrow(EntityValidationError);
 		});
 
-		it("should throw for CANCELLED_BY_MENTEE", () => {
-			expect(() => Booking.assertCancellable("CANCELLED_BY_MENTEE")).toThrow(
-				EntityValidationError,
-			);
+		it("should throw for STARTED booking", () => {
+			expect(() =>
+				Booking.assertCancellable("STARTED" as BookingStatus),
+			).toThrow(EntityValidationError);
 		});
 
-		it("should throw for CANCELLED_BY_MENTOR", () => {
-			expect(() => Booking.assertCancellable("CANCELLED_BY_MENTOR")).toThrow(
-				EntityValidationError,
-			);
+		it("should throw for CANCELLED_BY_MENTOR booking", () => {
+			expect(() =>
+				Booking.assertCancellable("CANCELLED_BY_MENTOR" as BookingStatus),
+			).toThrow(EntityValidationError);
 		});
 
-		it("should throw for STARTED", () => {
-			expect(() => Booking.assertCancellable("STARTED")).toThrow(
-				EntityValidationError,
-			);
+		it("should throw for CANCELLED_BY_MENTEE booking", () => {
+			expect(() =>
+				Booking.assertCancellable("CANCELLED_BY_MENTEE" as BookingStatus),
+			).toThrow(EntityValidationError);
 		});
 	});
 
-	describe("constructor", () => {
-		it("should allow all booking statuses", () => {
-			const now = new Date();
-			const timeStr = now.toISOString();
-			const endTimeStr = new Date(now.getTime() + 3600000).toISOString();
+	describe("assertReschedulable", () => {
+		it("should allow rescheduling when outside window", () => {
+			const futureDate = new Date();
+			futureDate.setHours(futureDate.getHours() + 10);
 
-			const statuses: Array<
-				| "PENDING"
-				| "CONFIRMED"
-				| "CANCELLED_BY_MENTEE"
-				| "CANCELLED_BY_MENTOR"
-				| "SLOT_TAKEN_BY_ANOTHER_USER"
-				| "STARTED"
-				| "COMPLETED"
-			> = [
-				"PENDING",
+			const now = new Date();
+			const booking = new Booking(
+				"booking-1",
+				"mentor-1",
+				"mentor-user-1",
+				"mentee-1",
+				futureDate.toISOString(),
+				new Date(futureDate.getTime() + 3600000).toISOString(),
 				"CONFIRMED",
-				"CANCELLED_BY_MENTEE",
-				"CANCELLED_BY_MENTOR",
-				"SLOT_TAKEN_BY_ANOTHER_USER",
-				"STARTED",
+				"https://zoom.us/j/123",
+				"COINS",
 				"COMPLETED",
-			];
+				100,
+				"USD",
+				null,
+				"Mentee Name",
+				"Mentor Name",
+				now,
+				null,
+				null,
+				now,
+				now,
+			);
 
-			statuses.forEach((status) => {
-				const booking = new Booking(
-					"b1",
-					"m1",
-					"mu1",
-					"u1",
-					timeStr,
-					endTimeStr,
-					status,
-					"url",
-					"COINS",
-					"PENDING",
-					100,
-					"INR",
-					"",
-					"",
-					"",
-					null,
-					null,
-					null,
-					now,
-					now,
-				);
-				expect(booking.status).toBe(status);
-			});
+			expect(() => booking.assertReschedulable(4)).not.toThrow();
 		});
 
-		it("should allow all payment types", () => {
+		it("should throw when within reschedule window", () => {
+			const futureDate = new Date();
+			futureDate.setHours(futureDate.getHours() + 2);
+
 			const now = new Date();
-			const timeStr = now.toISOString();
-			const endTimeStr = new Date(now.getTime() + 3600000).toISOString();
+			const booking = new Booking(
+				"booking-1",
+				"mentor-1",
+				"mentor-user-1",
+				"mentee-1",
+				futureDate.toISOString(),
+				new Date(futureDate.getTime() + 3600000).toISOString(),
+				"CONFIRMED",
+				"https://zoom.us/j/123",
+				"COINS",
+				"COMPLETED",
+				100,
+				"USD",
+				null,
+				"Mentee Name",
+				"Mentor Name",
+				now,
+				null,
+				null,
+				now,
+				now,
+			);
 
-			const types: Array<"COINS" | "STRIPE"> = ["COINS", "STRIPE"];
-
-			types.forEach((type) => {
-				const booking = new Booking(
-					"b1",
-					"m1",
-					"mu1",
-					"u1",
-					timeStr,
-					endTimeStr,
-					"PENDING",
-					"url",
-					type,
-					"PENDING",
-					100,
-					"INR",
-					"",
-					"",
-					"",
-					null,
-					null,
-					null,
-					now,
-					now,
-				);
-				expect(booking.paymentType).toBe(type);
-			});
+			expect(() => booking.assertReschedulable(4)).toThrow(
+				EntityValidationError,
+			);
 		});
 
-		it("should allow all payment statuses", () => {
+		it("should allow rescheduling well outside window", () => {
+			const futureDate = new Date();
+			futureDate.setHours(futureDate.getHours() + 10);
+
 			const now = new Date();
-			const timeStr = now.toISOString();
-			const endTimeStr = new Date(now.getTime() + 3600000).toISOString();
-
-			const statuses: Array<"PENDING" | "COMPLETED" | "FAILED" | "REFUNDED"> = [
-				"PENDING",
+			const booking = new Booking(
+				"booking-1",
+				"mentor-1",
+				"mentor-user-1",
+				"mentee-1",
+				futureDate.toISOString(),
+				new Date(futureDate.getTime() + 3600000).toISOString(),
+				"CONFIRMED",
+				"https://zoom.us/j/123",
+				"COINS",
 				"COMPLETED",
-				"FAILED",
-				"REFUNDED",
-			];
+				100,
+				"USD",
+				null,
+				"Mentee Name",
+				"Mentor Name",
+				now,
+				null,
+				null,
+				now,
+				now,
+			);
 
-			statuses.forEach((status) => {
-				const booking = new Booking(
-					"b1",
-					"m1",
-					"mu1",
-					"u1",
-					timeStr,
-					endTimeStr,
-					"PENDING",
-					"url",
-					"COINS",
-					status,
-					100,
-					"INR",
-					"",
-					"",
-					"",
-					null,
-					null,
-					null,
-					now,
-					now,
-				);
-				expect(booking.paymentStatus).toBe(status);
-			});
+			expect(() => booking.assertReschedulable(4)).not.toThrow();
 		});
 	});
 });
