@@ -1,9 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { UserNotFoundError } from "../../../../src/application/modules/authentication/errors";
-import type {
-	CreateChatInput,
-	CreateChatOutput,
-} from "../../../../src/application/modules/chat/dtos/chat.dto";
+import type { CreateChatInput } from "../../../../src/application/modules/chat/dtos/chat.dto";
 import { ChatNotAllowedError } from "../../../../src/application/modules/chat/errors";
 import { CreateChatUseCase } from "../../../../src/application/modules/chat/use-cases/create-chat.use-case";
 import type { IIdGenerator } from "../../../../src/application/services/id-generator.service.interface";

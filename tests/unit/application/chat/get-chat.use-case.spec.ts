@@ -105,7 +105,7 @@ describe("GetChatUseCase", () => {
 
 		const result = await useCase.execute(baseInput);
 
-		expect(result.chat.id).toBe("chat-1");
+		expect(result.chat?.id).toBe("chat-1");
 		expect(result.receiver).not.toBeNull();
 		expect(result.receiver?.name).toBe("Mentor One");
 		expect(result.messages).toHaveLength(2);

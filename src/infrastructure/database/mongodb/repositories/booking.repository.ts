@@ -55,7 +55,9 @@ export class BookingRepository implements IBookingRepository {
 		startTime: Date,
 		endTime: Date,
 	): Promise<Booking[]> {
-		const orConditions: any[] = [{ menteeId: userId }];
+		const orConditions: Array<{ menteeId?: string; mentorId?: string }> = [
+			{ menteeId: userId },
+		];
 		if (mentorId) {
 			orConditions.push({ mentorId });
 		}

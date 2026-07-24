@@ -1,8 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import type {
-	GetPreSignedUploadUrlInput,
-	GetPreSignedUploadUrlOutput,
-} from "../../../../src/application/modules/storage/dtos/get-presigned-upload-url.dto";
+import type { GetPreSignedUploadUrlInput } from "../../../../src/application/modules/storage/dtos/get-presigned-upload-url.dto";
 import { GetPreSignedUploadUrlUseCase } from "../../../../src/application/modules/storage/use-cases/get-presigned-upload-url.use-case";
 import type { IIdGenerator } from "../../../../src/application/services/id-generator.service.interface";
 import type { IStorageService } from "../../../../src/application/services/storage.service.interface";
@@ -39,7 +36,7 @@ describe("GetPreSignedUploadUrlUseCase", () => {
 		idGenerator.generate.mockReturnValue("generated-id-123");
 		storageService.getPresignedPost.mockResolvedValue(mockPresignedResponse);
 
-		const result = await useCase.execute(baseInput);
+		await useCase.execute(baseInput);
 
 		expect(idGenerator.generate).toHaveBeenCalled();
 		expect(storageService.getPresignedPost).toHaveBeenCalledWith(
@@ -56,7 +53,7 @@ describe("GetPreSignedUploadUrlUseCase", () => {
 		idGenerator.generate.mockReturnValue("generated-id");
 		storageService.getPresignedPost.mockResolvedValue(mockPresignedResponse);
 
-		const result = await useCase.execute(input);
+		await useCase.execute(input);
 
 		expect(storageService.getPresignedPost).toHaveBeenCalledWith(
 			"profile-picture/generated-id.testfile",
@@ -72,7 +69,7 @@ describe("GetPreSignedUploadUrlUseCase", () => {
 		idGenerator.generate.mockReturnValue("generated-id");
 		storageService.getPresignedPost.mockResolvedValue(mockPresignedResponse);
 
-		const result = await useCase.execute(input);
+		await useCase.execute(input);
 
 		expect(storageService.getPresignedPost).toHaveBeenCalledWith(
 			"profile-picture/generated-id.gz",
