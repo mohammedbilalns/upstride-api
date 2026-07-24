@@ -350,7 +350,7 @@ describe("dashboard-analytics.util", () => {
 			const mentorId = {
 				userId: { name: "John Mentor", _id: "u1" },
 				_id: "m1",
-			} as any;
+			};
 
 			const result = getMentorName(mentorId);
 
@@ -364,7 +364,7 @@ describe("dashboard-analytics.util", () => {
 		});
 
 		it("should return null when userId.name is undefined", () => {
-			const mentorId = { userId: { _id: "u1" }, _id: "m1" } as any;
+			const mentorId = { userId: { _id: "u1" }, _id: "m1" };
 
 			const result = getMentorName(mentorId);
 
@@ -374,7 +374,7 @@ describe("dashboard-analytics.util", () => {
 
 	describe("getMenteeName", () => {
 		it("should return name when menteeId is an object with name", () => {
-			const menteeId = { name: "Jane Mentee", _id: "u1" } as any;
+			const menteeId = { name: "Jane Mentee", _id: "u1" };
 
 			const result = getMenteeName(menteeId);
 
@@ -388,7 +388,7 @@ describe("dashboard-analytics.util", () => {
 		});
 
 		it("should return null when name is undefined", () => {
-			const menteeId = { _id: "u1" } as any;
+			const menteeId = { _id: "u1" };
 
 			const result = getMenteeName(menteeId);
 
@@ -407,7 +407,7 @@ describe("dashboard-analytics.util", () => {
 							{ _id: "cat1", name: "JavaScript" },
 							{ _id: "cat2", name: "Python" },
 						],
-					} as any,
+					},
 					menteeId: "u1",
 					startTime: new Date(),
 					endTime: new Date(),
@@ -424,7 +424,7 @@ describe("dashboard-analytics.util", () => {
 					mentorId: {
 						_id: "m2",
 						areasOfExpertise: [{ _id: "cat2", name: "Python" }],
-					} as any,
+					},
 					menteeId: "u2",
 					startTime: new Date(),
 					endTime: new Date(),
@@ -457,7 +457,7 @@ describe("dashboard-analytics.util", () => {
 					mentorId: {
 						_id: "m1",
 						areasOfExpertise: [{ _id: "cat1", name: "JavaScript" }],
-					} as any,
+					},
 					menteeId: "u1",
 					startTime: new Date(),
 					endTime: new Date(),
@@ -474,7 +474,7 @@ describe("dashboard-analytics.util", () => {
 					mentorId: {
 						_id: "m1",
 						areasOfExpertise: [{ _id: "cat1", name: "JavaScript" }],
-					} as any,
+					},
 					menteeId: "u2",
 					startTime: new Date(),
 					endTime: new Date(),
@@ -561,7 +561,7 @@ describe("dashboard-analytics.util", () => {
 			const booking: DashboardBookingRecord = {
 				_id: "b1",
 				mentorId: "m1",
-				menteeId: { name: "Jane" } as any,
+				menteeId: { name: "Jane" },
 				startTime: new Date("2025-06-01T10:00:00Z"),
 				endTime: new Date("2025-06-01T11:00:00Z"),
 				status: "COMPLETED",
@@ -591,7 +591,7 @@ describe("dashboard-analytics.util", () => {
 			const booking: DashboardBookingRecord = {
 				_id: "b1",
 				mentorId: "m1",
-				menteeId: { name: "Jane" } as any,
+				menteeId: { name: "Jane" },
 				startTime: new Date("2025-06-01T10:00:00Z"),
 				endTime: new Date("2025-06-01T11:00:00Z"),
 				status: "PENDING",

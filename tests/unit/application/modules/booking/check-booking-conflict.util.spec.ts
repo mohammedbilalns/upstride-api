@@ -79,7 +79,7 @@ describe("check-booking-conflict.util", () => {
 		it("should return true when the user is the mentor of the overlapping booking", async () => {
 			mentorRepository.findProfileByUserId.mockResolvedValue({
 				id: "mentor-1",
-			} as any);
+			} as unknown as any);
 			bookingRepository.findOverlappingForUser.mockResolvedValue([
 				createBooking({
 					id: "conflict-1",
@@ -144,7 +144,7 @@ describe("check-booking-conflict.util", () => {
 		it("should pass the mentorId when user has a mentor profile", async () => {
 			mentorRepository.findProfileByUserId.mockResolvedValue({
 				id: "mentor-1",
-			} as any);
+			} as unknown as any);
 			bookingRepository.findOverlappingForUser.mockResolvedValue([]);
 
 			await checkBookingConflict(
