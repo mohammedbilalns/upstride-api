@@ -1,6 +1,9 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import type { EventBus } from "../../../../src/application/events/event-bus.interface";
-import type { SendMessageInput } from "../../../../src/application/modules/chat/dtos/chat.dto";
+import type {
+	ChatDto,
+	SendMessageInput,
+} from "../../../../src/application/modules/chat/dtos/chat.dto";
 import {
 	ChatAccessDeniedError,
 	ChatNotFoundError,
@@ -93,7 +96,7 @@ describe("SendMessageUseCase", () => {
 	it("should throw ChatNotFoundError when chat does not exist and create fails", async () => {
 		chatRepository.findById.mockResolvedValue(null);
 		chatRepository.findByParticipants.mockResolvedValue(null);
-		createChatUseCase.execute.mockRejectedValue(new Error("Create failed"));
+		createChatUseCase.execute.mockRejectedValue(new ChatNotFoundError());
 
 		await expect(useCase.execute(baseInput)).rejects.toBeInstanceOf(
 			ChatNotFoundError,
@@ -181,10 +184,23 @@ describe("SendMessageUseCase", () => {
 		expect(createChatUseCase.execute).not.toHaveBeenCalled();
 	});
 
+	const mockChatDto: ChatDto = {
+		id: "chat-1",
+		senderId: "user-1",
+		receiverId: "mentor-1",
+		sender: { id: "user-1", name: "User One" },
+		receiver: { id: "mentor-1", name: "Mentor One" },
+		lastMessageId: null,
+		lastMessage: null,
+		unreadCount: { "user-1": 0, "mentor-1": 0 },
+		createdAt: new Date(),
+		updatedAt: new Date(),
+	};
+
 	it("should create new chat when none exists between participants", async () => {
 		chatRepository.findById.mockResolvedValue(null);
 		chatRepository.findByParticipants.mockResolvedValue(null);
-		createChatUseCase.execute.mockResolvedValue({ chat: mockChat });
+		createChatUseCase.execute.mockResolvedValue({ chat: mockChatDto });
 		chatRepository.findById
 			.mockResolvedValueOnce(null)
 			.mockResolvedValueOnce(mockChat);

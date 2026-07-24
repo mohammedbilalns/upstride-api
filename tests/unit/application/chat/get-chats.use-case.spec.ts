@@ -1,8 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import type {
-	GetChatsInput,
-	GetChatsOutput,
-} from "../../../../src/application/modules/chat/dtos/chat.dto";
+import type { GetChatsInput } from "../../../../src/application/modules/chat/dtos/chat.dto";
 import { GetChatsUseCase } from "../../../../src/application/modules/chat/use-cases/get-chats.use-case";
 import type { IStorageService } from "../../../../src/application/services/storage.service.interface";
 import type { IChatRepository } from "../../../../src/domain/repositories";
@@ -50,8 +47,9 @@ describe("GetChatsUseCase", () => {
 			total: 2,
 			page: 1,
 			limit: 10,
+			totalPages: 1,
 			users: [mockUser, mockMentor],
-			lastMessages: new Map(),
+			lastMessages: {},
 		});
 
 		const result = await useCase.execute(baseInput);
@@ -72,8 +70,9 @@ describe("GetChatsUseCase", () => {
 			total: 2,
 			page: 1,
 			limit: 10,
+			totalPages: 1,
 			users: [mockUser, mockMentor],
-			lastMessages: new Map(),
+			lastMessages: {},
 		});
 
 		await useCase.execute({ ...baseInput, filter: "unread" });
@@ -92,8 +91,9 @@ describe("GetChatsUseCase", () => {
 			total: 2,
 			page: 1,
 			limit: 10,
+			totalPages: 1,
 			users: [mockUser, mockMentor],
-			lastMessages: new Map(),
+			lastMessages: {},
 		});
 
 		const result = await useCase.execute(baseInput);
@@ -110,8 +110,9 @@ describe("GetChatsUseCase", () => {
 			total: 0,
 			page: 1,
 			limit: 10,
+			totalPages: 0,
 			users: [],
-			lastMessages: new Map(),
+			lastMessages: {},
 		});
 
 		const result = await useCase.execute(baseInput);

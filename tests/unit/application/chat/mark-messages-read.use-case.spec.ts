@@ -96,7 +96,7 @@ describe("MarkMessagesReadUseCase", () => {
 		await useCase.execute(baseInput);
 
 		const updateArg = chatRepository.updateById.mock.calls[0][1];
-		expect(updateArg.unreadCount.get("user-1")).toBe(0);
+		expect(updateArg.unreadCount?.get("user-1")).toBe(0);
 	});
 
 	it("should handle zero updated count", async () => {

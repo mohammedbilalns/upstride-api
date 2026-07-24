@@ -22,8 +22,12 @@ export class WebPushAdapter implements PushNotificationPort {
 	): Promise<void> {
 		try {
 			await webpush.sendNotification(subscription, payload);
-		} catch (error: any) {
-			if (error.statusCode === 404 || error.statusCode === 410) {
+		} catch (error: unknown) {
+			const statusCode =
+				typeof error === "object" && error !== null && "statusCode" in error
+					? (error as { statusCode?: number }).statusCode
+					: undefined;
+			if (statusCode === 404 || statusCode === 410) {
 				throw new Error("SUBSCRIPTION_EXPIRED");
 			}
 			throw error;

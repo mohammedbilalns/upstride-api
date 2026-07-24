@@ -40,7 +40,7 @@ describe("GetMentorReviewsUseCase", () => {
 			skillsDetails: [],
 		});
 		reviewRepository.paginateByMentorId.mockResolvedValue({
-			items: [createReview()],
+			items: [{ ...createReview(), reviewerName: "User One" }],
 			total: 1,
 			page: 2,
 			limit: 5,

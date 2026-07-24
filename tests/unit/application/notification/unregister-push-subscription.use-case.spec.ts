@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { UnregisterPushSubscriptionUseCase } from "../../../../src/application/modules/notification/use-cases/unregister-push-subscription.use-case";
 import type { IPushSubscriptionRepository } from "../../../../src/domain/repositories/push-subscription.repository.interface";
+import { createPushSubscription } from "../../../factories/entities/push-subscription.factory";
 import { createMock } from "../../../factories/utilities/create-mock";
 
 describe("UnregisterPushSubscriptionUseCase", () => {
@@ -16,12 +17,12 @@ describe("UnregisterPushSubscriptionUseCase", () => {
 
 	it("should delete the endpoint when it exists for the user", async () => {
 		pushSubscriptionRepository.findByUserId.mockResolvedValue([
-			{
+			createPushSubscription({
 				userId: "user-1",
 				endpoint: "https://push.example.com/sub-1",
 				keys: { p256dh: "key", auth: "auth" },
 				deviceType: "web",
-			},
+			}),
 		]);
 
 		await useCase.execute({
