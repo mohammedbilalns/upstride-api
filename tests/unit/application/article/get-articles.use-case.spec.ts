@@ -116,7 +116,7 @@ describe("GetArticlesUseCase", () => {
 		);
 	});
 
-	it("should filter by multiple tags", async () => {
+	it("should pass a single tag value through unchanged", async () => {
 		const input: GetArticlesInput = { ...baseInput, tag: "nestjs,typescript" };
 		articleRepository.paginate.mockResolvedValue({
 			items: mockArticles,
@@ -130,7 +130,7 @@ describe("GetArticlesUseCase", () => {
 
 		expect(articleRepository.paginate).toHaveBeenCalledWith(
 			expect.objectContaining({
-				query: expect.objectContaining({ tags: ["nestjs", "typescript"] }),
+				query: expect.objectContaining({ tags: "nestjs,typescript" }),
 			}),
 		);
 	});

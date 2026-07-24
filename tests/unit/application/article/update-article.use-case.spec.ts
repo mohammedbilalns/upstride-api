@@ -118,7 +118,8 @@ describe("UpdateArticleUseCase", () => {
 			expect.objectContaining({
 				title: "Updated Title",
 				description: "Updated description",
-				featuredImageUrl: "https://example.com/updated.png",
+				featuredImageUrl: "updated.png",
+				previewContent: "Updated description",
 				tags: ["updated"],
 				isArchived: true,
 			}),
