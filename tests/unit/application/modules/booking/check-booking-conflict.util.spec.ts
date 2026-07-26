@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { checkBookingConflict } from "../../../../../src/application/modules/booking/utils/check-booking-conflict.util";
 import type { IBookingRepository } from "../../../../../src/domain/repositories/booking.repository.interface";
+import type { MentorProfileDetails } from "../../../../../src/domain/repositories/mentor.repository.types";
 import type { IMentorProfileReadRepository } from "../../../../../src/domain/repositories/mentor-profile-read.repository.interface";
 import { createBooking } from "../../../../factories/entities/booking.factory";
 import { createMock } from "../../../../factories/utilities/create-mock";
@@ -18,6 +19,10 @@ describe("check-booking-conflict.util", () => {
 			bookingRepository = createMock<IBookingRepository>();
 			mentorRepository = createMock<IMentorProfileReadRepository>();
 		});
+
+		const mentorProfile = {
+			id: "mentor-1",
+		} as MentorProfileDetails;
 
 		it("should return false when there are no overlapping bookings", async () => {
 			mentorRepository.findProfileByUserId.mockResolvedValue(null);
@@ -77,9 +82,7 @@ describe("check-booking-conflict.util", () => {
 		});
 
 		it("should return true when the user is the mentor of the overlapping booking", async () => {
-			mentorRepository.findProfileByUserId.mockResolvedValue({
-				id: "mentor-1",
-			} as unknown as any);
+			mentorRepository.findProfileByUserId.mockResolvedValue(mentorProfile);
 			bookingRepository.findOverlappingForUser.mockResolvedValue([
 				createBooking({
 					id: "conflict-1",
@@ -142,9 +145,7 @@ describe("check-booking-conflict.util", () => {
 		});
 
 		it("should pass the mentorId when user has a mentor profile", async () => {
-			mentorRepository.findProfileByUserId.mockResolvedValue({
-				id: "mentor-1",
-			} as unknown as any);
+			mentorRepository.findProfileByUserId.mockResolvedValue(mentorProfile);
 			bookingRepository.findOverlappingForUser.mockResolvedValue([]);
 
 			await checkBookingConflict(

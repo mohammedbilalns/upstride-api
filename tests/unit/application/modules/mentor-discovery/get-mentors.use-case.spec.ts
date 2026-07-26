@@ -5,6 +5,7 @@ import type {
 	IInterestRepository,
 	IMentorListReadRepository,
 } from "../../../../../src/domain/repositories";
+import type { MentorDiscoveryDetails } from "../../../../../src/domain/repositories/mentor.repository.types";
 import { createInterest } from "../../../../factories/entities/interest.factory";
 import { createMock } from "../../../../factories/utilities/create-mock";
 
@@ -54,14 +55,41 @@ describe("GetMentorsUseCase", () => {
 
 		const mockMentorListItem = {
 			id: "mentor-1",
+			userId: "user-1",
+			bio: "Bio",
+			yearsOfExperience: 5,
+			avgRating: 4.5,
+			tierName: "Gold",
+			languages: ["English"],
+			areasOfExpertise: ["cat-1"],
+			currentRoleId: "role-1",
+			organization: "Org",
+			score: 90,
+			tierMax30minPayment: 500,
+			currentPricePer30Min: 400,
+			personalWebsite: null,
+			resumeId: "resume-1",
+			educationalQualifications: [],
+			toolsAndSkills: [],
+			experience: [],
+			isApproved: true,
+			applicationAttempts: 1,
+			skippedSessionsCount: 0,
+			totalSessions: 10,
+			lastSessionAt: null,
+			isRejected: false,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+			rejectionReason: null,
+			isUserBlocked: false,
 			user: { name: "John", profilePictureId: "pic-1" },
 			currentRoleDetails: { name: "Senior Lead" },
-			expertisesDetails: [],
-			skillsDetails: [],
-		};
+			categories: [],
+			skills: [],
+		} as MentorDiscoveryDetails;
 
 		mentorRepository.paginateDiscoverable.mockResolvedValue({
-			items: [mockMentorListItem as unknown as any],
+			items: [mockMentorListItem],
 			total: 1,
 			page: 1,
 			limit: 10,

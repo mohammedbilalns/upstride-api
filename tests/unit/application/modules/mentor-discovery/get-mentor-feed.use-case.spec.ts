@@ -7,6 +7,8 @@ import type {
 	IMentorProfileReadRepository,
 	IUserRepository,
 } from "../../../../../src/domain/repositories";
+import type { MentorProfileDetails } from "../../../../../src/domain/repositories/mentor.repository.types";
+import type { MentorForFeed } from "../../../../../src/shared/utilities/feed-scoring.util";
 import { createUser } from "../../../../factories/entities/user.factory";
 import { createMock } from "../../../../factories/utilities/create-mock";
 
@@ -73,11 +75,22 @@ describe("GetMentorFeedUseCase", () => {
 		});
 		userRepository.findById.mockResolvedValue(mockUser);
 		feedCacheService.get.mockReturnValue(null);
-		// Mock findFeedCandidates to return mentor IDs
 		mentorProfileReadRepository.findFeedCandidates.mockResolvedValue([
-			"mentor-1",
-			"mentor-2",
-		] as unknown as any);
+			{
+				id: "mentor-1",
+				interests: ["Tech"],
+				rating: 4.8,
+				totalSessions: 10,
+				lastSessionAt: new Date("2026-07-20T00:00:00.000Z"),
+			},
+			{
+				id: "mentor-2",
+				interests: ["Tech"],
+				rating: 4.5,
+				totalSessions: 8,
+				lastSessionAt: new Date("2026-07-18T00:00:00.000Z"),
+			},
+		] as MentorForFeed[]);
 
 		const mockMentorProfile = {
 			id: "mentor-1",
@@ -89,13 +102,16 @@ describe("GetMentorFeedUseCase", () => {
 			currentRoleDetails: { name: "Dev" },
 			expertisesDetails: [{ id: "exp-1", name: "Backend" }],
 			skillsDetails: [
-				{ skillId: { id: "sk-1", name: "Node" }, yearsOfExperience: 5 },
+				{
+					skillId: { id: "sk-1", name: "Node", interestId: "int-1" },
+					level: "ADVANCED",
+				},
 			],
-		};
+		} as MentorProfileDetails;
 
 		mentorProfileReadRepository.findProfileById.mockImplementation(
 			async (id: string) => {
-				if (id === "mentor-1") return mockMentorProfile as unknown as any;
+				if (id === "mentor-1") return mockMentorProfile;
 				return null;
 			},
 		);
