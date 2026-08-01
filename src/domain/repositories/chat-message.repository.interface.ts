@@ -5,7 +5,6 @@ import type {
 import type {
 	CreatableRepository,
 	FindByIdRepository,
-	PaginatableRepository,
 	QueryableRepository,
 	UpdatableByIdRepository,
 } from "./capabilities";
@@ -20,7 +19,16 @@ export interface IChatMessageRepository
 	extends CreatableRepository<Chatmessage>,
 		FindByIdRepository<Chatmessage>,
 		QueryableRepository<Chatmessage, ChatMessageQuery>,
-		PaginatableRepository<Chatmessage, ChatMessageQuery>,
 		UpdatableByIdRepository<Chatmessage> {
+	listByChatId(
+		chatId: string,
+		cursor: string | null,
+		limit: number,
+	): Promise<{
+		items: Chatmessage[];
+		limit: number;
+		nextCursor: string | null;
+		hasMore: boolean;
+	}>;
 	markAsRead(chatId: string, readerId: string): Promise<number>;
 }

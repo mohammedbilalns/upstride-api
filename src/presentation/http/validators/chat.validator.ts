@@ -2,18 +2,17 @@ import { z } from "zod";
 import {
 	buildObjectIdParamSchema,
 	objectIdSchema,
-	pageSchema,
 } from "../../../shared/validators";
 
 export const ChatQuerySchema = z.object({
-	page: pageSchema,
+	cursor: z.string().trim().min(1).optional(),
 	filter: z.enum(["read", "unread", "all"]).default("all"),
 });
 
 export type ChatQuery = z.infer<typeof ChatQuerySchema>;
 
 export const GetChatQuerySchema = z.object({
-	page: pageSchema,
+	cursor: z.string().trim().min(1).optional(),
 });
 
 export type GetChatQuery = z.infer<typeof GetChatQuerySchema>;

@@ -46,7 +46,6 @@ describe("GetChatUseCase", () => {
 	const baseInput: GetChatInput = {
 		userId: "user-1",
 		otherUserId: "mentor-1",
-		page: 1,
 	};
 
 	const mockChat = createChat({
@@ -94,12 +93,11 @@ describe("GetChatUseCase", () => {
 			chat: mockChat,
 			users: mockUsers,
 		});
-		chatMessageRepository.paginate.mockResolvedValue({
+		chatMessageRepository.listByChatId.mockResolvedValue({
 			items: mockMessages,
-			total: 2,
-			page: 1,
 			limit: 10,
-			totalPages: 1,
+			nextCursor: null,
+			hasMore: false,
 		});
 		chatMessageRepository.markAsRead.mockResolvedValue(0);
 
@@ -109,7 +107,8 @@ describe("GetChatUseCase", () => {
 		expect(result.receiver).not.toBeNull();
 		expect(result.receiver?.name).toBe("Mentor One");
 		expect(result.messages).toHaveLength(2);
-		expect(result.total).toBe(2);
+		expect(result.limit).toBe(10);
+		expect(result.hasMore).toBe(false);
 	});
 
 	it("should mark messages as read and update unread count", async () => {
@@ -117,12 +116,11 @@ describe("GetChatUseCase", () => {
 			chat: mockChat,
 			users: mockUsers,
 		});
-		chatMessageRepository.paginate.mockResolvedValue({
+		chatMessageRepository.listByChatId.mockResolvedValue({
 			items: mockMessages,
-			total: 2,
-			page: 1,
 			limit: 10,
-			totalPages: 1,
+			nextCursor: null,
+			hasMore: false,
 		});
 		chatMessageRepository.markAsRead.mockResolvedValue(2);
 
@@ -147,12 +145,11 @@ describe("GetChatUseCase", () => {
 			users: usersWithoutReceiver,
 		});
 		userRepository.findById.mockResolvedValue(mockUsers[1]);
-		chatMessageRepository.paginate.mockResolvedValue({
+		chatMessageRepository.listByChatId.mockResolvedValue({
 			items: mockMessages,
-			total: 2,
-			page: 1,
 			limit: 10,
-			totalPages: 1,
+			nextCursor: null,
+			hasMore: false,
 		});
 		chatMessageRepository.markAsRead.mockResolvedValue(0);
 
@@ -171,12 +168,11 @@ describe("GetChatUseCase", () => {
 			chat: mockChat,
 			users: mockUsers,
 		});
-		chatMessageRepository.paginate.mockResolvedValue({
+		chatMessageRepository.listByChatId.mockResolvedValue({
 			items: [messageWithMedia],
-			total: 1,
-			page: 1,
 			limit: 10,
-			totalPages: 1,
+			nextCursor: null,
+			hasMore: false,
 		});
 		chatMessageRepository.markAsRead.mockResolvedValue(0);
 
@@ -186,8 +182,8 @@ describe("GetChatUseCase", () => {
 		expect(result.messages[0].mediaUrl).toBe("https://signed.example.com/file");
 	});
 
-	it("should use default page when not provided", async () => {
-		const inputWithoutPage: GetChatInput = {
+	it("should use a null cursor when not provided", async () => {
+		const inputWithoutCursor: GetChatInput = {
 			userId: "user-1",
 			otherUserId: "mentor-1",
 		};
@@ -195,21 +191,20 @@ describe("GetChatUseCase", () => {
 			chat: mockChat,
 			users: mockUsers,
 		});
-		chatMessageRepository.paginate.mockResolvedValue({
+		chatMessageRepository.listByChatId.mockResolvedValue({
 			items: [],
-			total: 0,
-			page: 1,
 			limit: 10,
-			totalPages: 0,
+			nextCursor: null,
+			hasMore: false,
 		});
 		chatMessageRepository.markAsRead.mockResolvedValue(0);
 
-		await useCase.execute(inputWithoutPage);
+		await useCase.execute(inputWithoutCursor);
 
-		expect(chatMessageRepository.paginate).toHaveBeenCalledWith(
-			expect.objectContaining({
-				page: 1,
-			}),
+		expect(chatMessageRepository.listByChatId).toHaveBeenCalledWith(
+			"chat-1",
+			null,
+			10,
 		);
 	});
 });

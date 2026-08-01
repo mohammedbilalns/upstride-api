@@ -7,7 +7,6 @@ import type {
 } from "../../../../domain/repositories";
 import { TYPES } from "../../../../shared/types/types";
 import type { IStorageService } from "../../../services/storage.service.interface";
-import { mapPaginatedResult } from "../../../shared/utilities/pagination.util";
 import type {
 	ChatUserDto,
 	GetChatInput,
@@ -97,12 +96,11 @@ export class GetChatUseCase implements IGetChatUseCase {
 			}
 		}
 
-		const result = await this._chatMessageRepository.paginate({
-			page: input.page ?? 1,
-			limit: CHAT_MESSAGES_PAGE_SIZE,
-			query: { chatId: existing.id },
-			sort: { createdAt: -1 },
-		});
+		const result = await this._chatMessageRepository.listByChatId(
+			existing.id,
+			input.cursor ?? null,
+			CHAT_MESSAGES_PAGE_SIZE,
+		);
 
 		const updatedCount = await this._chatMessageRepository.markAsRead(
 			existing.id,
@@ -136,8 +134,10 @@ export class GetChatUseCase implements IGetChatUseCase {
 			}),
 		);
 
-		const { items, ...meta } = mapPaginatedResult(result, (items) =>
-			items.map((item) =>
+		return {
+			chat: ChatMapper.toDtoForUser(chatForResponse, input.userId, usersById),
+			receiver: receiverDto,
+			messages: result.items.map((item) =>
 				ChatMessageMapper.toDto(
 					item,
 					item.attachementId
@@ -145,12 +145,9 @@ export class GetChatUseCase implements IGetChatUseCase {
 						: null,
 				),
 			),
-		);
-		return {
-			...meta,
-			chat: ChatMapper.toDtoForUser(chatForResponse, input.userId, usersById),
-			receiver: receiverDto,
-			messages: items,
+			limit: result.limit,
+			nextCursor: result.nextCursor,
+			hasMore: result.hasMore,
 		};
 	}
 }
