@@ -14,7 +14,6 @@ describe("GetChatsUseCase", () => {
 
 	const baseInput: GetChatsInput = {
 		userId: "user-1",
-		page: 1,
 		filter: "all",
 	};
 
@@ -42,56 +41,54 @@ describe("GetChatsUseCase", () => {
 	});
 
 	it("should return paginated chats for user", async () => {
-		chatRepository.paginateByUserWithUsers.mockResolvedValue({
+		chatRepository.listByUserWithUsers.mockResolvedValue({
 			items: mockChats,
-			total: 2,
-			page: 1,
 			limit: 10,
-			totalPages: 1,
+			nextCursor: "next-cursor",
+			hasMore: true,
 			users: [mockUser, mockMentor],
 			lastMessages: {},
 		});
 
 		const result = await useCase.execute(baseInput);
 
-		expect(chatRepository.paginateByUserWithUsers).toHaveBeenCalledWith(
+		expect(chatRepository.listByUserWithUsers).toHaveBeenCalledWith(
 			"user-1",
 			"all",
-			1,
+			null,
 			10,
 		);
 		expect(result.chats).toHaveLength(2);
-		expect(result.total).toBe(2);
+		expect(result.nextCursor).toBe("next-cursor");
+		expect(result.hasMore).toBe(true);
 	});
 
 	it("should filter chats by read status", async () => {
-		chatRepository.paginateByUserWithUsers.mockResolvedValue({
+		chatRepository.listByUserWithUsers.mockResolvedValue({
 			items: mockChats,
-			total: 2,
-			page: 1,
 			limit: 10,
-			totalPages: 1,
+			nextCursor: null,
+			hasMore: false,
 			users: [mockUser, mockMentor],
 			lastMessages: {},
 		});
 
 		await useCase.execute({ ...baseInput, filter: "unread" });
 
-		expect(chatRepository.paginateByUserWithUsers).toHaveBeenCalledWith(
+		expect(chatRepository.listByUserWithUsers).toHaveBeenCalledWith(
 			"user-1",
 			"unread",
-			1,
+			null,
 			10,
 		);
 	});
 
 	it("should generate signed URLs for user profile pictures", async () => {
-		chatRepository.paginateByUserWithUsers.mockResolvedValue({
+		chatRepository.listByUserWithUsers.mockResolvedValue({
 			items: mockChats,
-			total: 2,
-			page: 1,
 			limit: 10,
-			totalPages: 1,
+			nextCursor: null,
+			hasMore: false,
 			users: [mockUser, mockMentor],
 			lastMessages: {},
 		});
@@ -105,12 +102,11 @@ describe("GetChatsUseCase", () => {
 	});
 
 	it("should return empty array when no chats exist", async () => {
-		chatRepository.paginateByUserWithUsers.mockResolvedValue({
+		chatRepository.listByUserWithUsers.mockResolvedValue({
 			items: [],
-			total: 0,
-			page: 1,
 			limit: 10,
-			totalPages: 0,
+			nextCursor: null,
+			hasMore: false,
 			users: [],
 			lastMessages: {},
 		});
@@ -118,6 +114,6 @@ describe("GetChatsUseCase", () => {
 		const result = await useCase.execute(baseInput);
 
 		expect(result.chats).toHaveLength(0);
-		expect(result.total).toBe(0);
+		expect(result.hasMore).toBe(false);
 	});
 });

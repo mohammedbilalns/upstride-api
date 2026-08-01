@@ -3,7 +3,6 @@ import type { UserRole } from "../../../../domain/entities/user.entity";
 import type { IChatRepository } from "../../../../domain/repositories/chat.repository.interface";
 import { TYPES } from "../../../../shared/types/types";
 import type { IStorageService } from "../../../services/storage.service.interface";
-import { mapPaginatedResult } from "../../../shared/utilities/pagination.util";
 import type { GetChatsInput, GetChatsOutput } from "../dtos/chat.dto";
 import { ChatMapper } from "../mappers/chat.mapper";
 import type { IGetChatsUseCase } from "./get-chats.use-case.interface";
@@ -20,10 +19,10 @@ export class GetChatsUseCase implements IGetChatsUseCase {
 	) {}
 
 	async execute(input: GetChatsInput): Promise<GetChatsOutput> {
-		const result = await this._chatRepository.paginateByUserWithUsers(
+		const result = await this._chatRepository.listByUserWithUsers(
 			input.userId,
 			input.filter ?? "all",
-			input.page ?? 1,
+			input.cursor ?? null,
 			CHAT_PAGE_SIZE,
 		);
 
@@ -78,14 +77,16 @@ export class GetChatsUseCase implements IGetChatsUseCase {
 			}),
 		);
 
-		const { items, ...meta } = mapPaginatedResult(result, (items) =>
-			ChatMapper.toDtosForUser(
-				items,
+		return {
+			chats: ChatMapper.toDtosForUser(
+				result.items,
 				input.userId,
 				usersById,
 				result.lastMessages,
 			),
-		);
-		return { ...meta, chats: items };
+			limit: result.limit,
+			nextCursor: result.nextCursor,
+			hasMore: result.hasMore,
+		};
 	}
 }

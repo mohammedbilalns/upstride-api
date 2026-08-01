@@ -51,32 +51,30 @@ export type ChatReadFilter = "read" | "unread" | "all";
 
 export interface GetChatsInput {
 	userId: string;
-	page?: number;
+	cursor?: string;
 	filter?: ChatReadFilter;
 }
 
 export interface GetChatsOutput {
 	chats: ChatDto[];
-	total: number;
-	page: number;
 	limit: number;
-	totalPages: number;
+	nextCursor: string | null;
+	hasMore: boolean;
 }
 
 export interface GetChatInput {
 	userId: string;
 	otherUserId: string;
-	page?: number;
+	cursor?: string;
 }
 
 export interface GetChatOutput {
 	chat: ChatDto | null;
 	receiver: ChatUserDto | null;
 	messages: ChatMessageDto[];
-	total: number;
-	page: number;
 	limit: number;
-	totalPages: number;
+	nextCursor: string | null;
+	hasMore: boolean;
 }
 
 export interface CreateChatInput {
