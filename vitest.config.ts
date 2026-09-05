@@ -6,7 +6,7 @@ export default defineConfig({
 		environment: "node",
 		clearMocks: true,
 		restoreMocks: true,
-		setupFiles: ["./tests/setup-env.ts"],
+		include: ["tests/unit/**/*.spec.ts"],
 		coverage: {
 			provider: "v8",
 			reporter: ["text", "html"],
