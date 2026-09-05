@@ -10,7 +10,7 @@ COPY package.json pnpm-lock.yaml ./
 
 RUN pnpm install --frozen-lockfile
 
-COPY tsconfig.json ./
+COPY tsconfig.json tsconfig.build.json ./
 COPY src ./src
 
 RUN NODE_OPTIONS="--max-old-space-size=768" pnpm run build
