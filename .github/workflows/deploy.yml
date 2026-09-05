@@ -60,7 +60,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             sudo -u upstride bash -c '
-              cd /opt/upstride/upstride-backend
+              cd /opt/upstride/upstride-api
 
               echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u "${{ secrets.GHCR_USERNAME }}" --password-stdin
 
