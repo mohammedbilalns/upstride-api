@@ -2,10 +2,12 @@ import { inject, injectable } from "inversify";
 import { UserPreferences } from "../../../../domain/entities/user-preferences.entity";
 import { ProfileUpdatedEvent } from "../../../../domain/events/profile-updated.event";
 import type { IUserRepository } from "../../../../domain/repositories";
+import env from "../../../../shared/config/env";
 import { TYPES } from "../../../../shared/types/types";
 import type { EventBus } from "../../../events/event-bus.interface";
 import type { IStorageService } from "../../../services/storage.service.interface";
 import { getUserByIdOrThrow } from "../../../shared/utilities/user.util";
+import { UnauthorizedError } from "../../authentication/errors";
 import type { UpdateProfileInput } from "../dtos/update-profile.dto";
 import type { IUpdateProfileUseCase } from "./update-profile.use-case.interface";
 
@@ -22,6 +24,8 @@ export class UpdateProfileUseCase implements IUpdateProfileUseCase {
 
 	async execute(input: UpdateProfileInput): Promise<void> {
 		const user = await getUserByIdOrThrow(this._userRepository, input.userId);
+		if (user.email === env.DUMMY_LOGIN_EMAIL)
+			throw new UnauthorizedError("Cannot update dummy user profile ");
 
 		const updateData: Record<string, unknown> = {};
 

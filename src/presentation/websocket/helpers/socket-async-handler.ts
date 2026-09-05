@@ -5,7 +5,10 @@ import { ErrorMessages, HttpStatus } from "../../../shared/constants";
 import { BaseError } from "../../../shared/errors/base.error";
 import logger from "../../../shared/logging/logger";
 
-type SocketHandler = (payload: any, ...args: any[]) => Promise<void> | void;
+type SocketHandler = (
+	payload: unknown,
+	...args: unknown[]
+) => Promise<void> | void;
 
 /**
  * A wrapper for Socket.io event handlers that catches async errors and
@@ -14,7 +17,7 @@ export const socketAsyncHandler = (
 	handler: SocketHandler,
 	errorEvent = "socket:error",
 ) => {
-	return async function (this: Socket, payload: any, ...args: any[]) {
+	return async function (this: Socket, payload: unknown, ...args: unknown[]) {
 		try {
 			await handler.apply(this, [payload, ...args]);
 		} catch (err) {

@@ -61,7 +61,7 @@ export class PdfReceiptService implements IPdfReceiptService {
 				const formatCurrency = (amount: number, currency: string) => {
 					// Use INR instead of unicode rupee symbol to avoid font errors in default PDFKit fonts.
 					const symbol =
-						currency.toLowerCase() === "inr" ? "INR " : currency + " ";
+						currency.toLowerCase() === "inr" ? "INR " : `${currency} `;
 					return `${symbol}${amount.toFixed(2)}`;
 				};
 

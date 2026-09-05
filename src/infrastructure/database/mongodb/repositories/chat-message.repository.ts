@@ -1,5 +1,5 @@
 import { injectable } from "inversify";
-import type { QueryFilter } from "mongoose";
+import { type QueryFilter, Types } from "mongoose";
 import type { Chatmessage } from "../../../../domain/entities/chat-message.entity";
 import type { PaginateParams } from "../../../../domain/repositories";
 import type { QueryParams } from "../../../../domain/repositories/capabilities";
@@ -89,6 +89,52 @@ export class MongoChatMessageRepository
 		return this.buildPaginatedResult(items, total, page, limit);
 	}
 
+	async listByChatId(
+		chatId: string,
+		cursor: string | null,
+		limit: number,
+	): Promise<{
+		items: Chatmessage[];
+		limit: number;
+		nextCursor: string | null;
+		hasMore: boolean;
+	}> {
+		const filter = this._buildFilter({ chatId });
+		const parsedCursor = decodeCursor(cursor);
+
+		if (parsedCursor) {
+			filter.$or = [
+				{ createdAt: { $lt: parsedCursor.timestamp } },
+				{
+					createdAt: parsedCursor.timestamp,
+					_id: { $lt: new Types.ObjectId(parsedCursor.id) },
+				},
+			];
+		}
+
+		const docs = await this.model
+			.find(filter)
+			.sort({ createdAt: -1, _id: -1 })
+			.limit(limit + 1)
+			.lean();
+
+		const hasMore = docs.length > limit;
+		const items = docs
+			.slice(0, limit)
+			.map((doc) => this.toDomain(doc as ChatMessageDocument));
+		const lastDoc = docs[limit - 1] as ChatMessageDocument | undefined;
+
+		return {
+			items,
+			limit,
+			hasMore,
+			nextCursor:
+				hasMore && lastDoc
+					? encodeCursor(lastDoc.createdAt, lastDoc._id.toString())
+					: null,
+		};
+	}
+
 	private _buildFilter(
 		query?: ChatMessageQuery,
 	): QueryFilter<ChatMessageDocument> {
@@ -114,3 +160,34 @@ export class MongoChatMessageRepository
 		return result.modifiedCount ?? 0;
 	}
 }
+
+const encodeCursor = (timestamp: Date, id: string): string =>
+	Buffer.from(
+		JSON.stringify({ timestamp: timestamp.toISOString(), id }),
+	).toString("base64url");
+
+const decodeCursor = (
+	cursor: string | null,
+): { timestamp: Date; id: string } | null => {
+	if (!cursor) return null;
+
+	try {
+		const parsed = JSON.parse(
+			Buffer.from(cursor, "base64url").toString("utf8"),
+		) as {
+			timestamp?: string;
+			id?: string;
+		};
+
+		if (!parsed.timestamp || !parsed.id || !Types.ObjectId.isValid(parsed.id)) {
+			return null;
+		}
+
+		const timestamp = new Date(parsed.timestamp);
+		if (Number.isNaN(timestamp.getTime())) return null;
+
+		return { timestamp, id: parsed.id };
+	} catch {
+		return null;
+	}
+};

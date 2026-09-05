@@ -1,5 +1,5 @@
 import { injectable } from "inversify";
-import type { QueryFilter } from "mongoose";
+import { type QueryFilter, Types } from "mongoose";
 import type { Chat } from "../../../../domain/entities/chat.entity";
 import type {
 	ChatUserSummary,
@@ -179,10 +179,10 @@ export class MongoChatRepository
 		};
 	}
 
-	async paginateByUserWithUsers(
+	async listByUserWithUsers(
 		userId: string,
 		filter: "read" | "unread" | "all",
-		page: number,
+		cursor: string | null,
 		limit: number,
 	): Promise<{
 		items: Chat[];
@@ -198,10 +198,9 @@ export class MongoChatRepository
 				createdAt: Date;
 			}
 		>;
-		total: number;
-		page: number;
 		limit: number;
-		totalPages: number;
+		nextCursor: string | null;
+		hasMore: boolean;
 	}> {
 		const userFilter: QueryFilter<ChatDocument> = {
 			$or: [{ user1Id: userId }, { user2Id: userId }],
@@ -217,36 +216,88 @@ export class MongoChatRepository
 						}
 					: {};
 
-		const combinedFilter: QueryFilter<ChatDocument> = {
-			$and: [userFilter, readFilter],
-		};
+		const andFilters: QueryFilter<ChatDocument>[] = [userFilter];
+		if (Object.keys(readFilter).length > 0) {
+			andFilters.push(readFilter);
+		}
+		const parsedCursor = decodeCursor(cursor);
 
-		const skip = (page - 1) * limit;
+		if (parsedCursor) {
+			andFilters.push({
+				$or: [
+					{ updatedAt: { $lt: parsedCursor.timestamp } },
+					{
+						updatedAt: parsedCursor.timestamp,
+						_id: { $lt: new Types.ObjectId(parsedCursor.id) },
+					},
+				],
+			});
+		}
 
-		const [docs, total] = await Promise.all([
-			this.model
-				.find(combinedFilter)
-				.sort({ updatedAt: -1 })
-				.skip(skip)
-				.limit(limit)
-				.populate("user1Id", "name profilePictureId role")
-				.populate("user2Id", "name profilePictureId role")
-				.populate(
-					"lastMessageId",
-					"senderId messageType content mediaId createdAt",
-				)
-				.lean<PopulatedChatDocument[]>(),
-			this.model.countDocuments(combinedFilter),
-		]);
+		const combinedFilter: QueryFilter<ChatDocument> =
+			andFilters.length === 1 ? andFilters[0] : { $and: andFilters };
 
-		const items = docs.map((doc) => this.toDomain(doc as ChatDocument));
-		const users = collectUsersFromChats(docs);
-		const lastMessages = collectLastMessages(docs);
+		const docs = await this.model
+			.find(combinedFilter)
+			.sort({ updatedAt: -1, _id: -1 })
+			.limit(limit + 1)
+			.populate("user1Id", "name profilePictureId role")
+			.populate("user2Id", "name profilePictureId role")
+			.populate(
+				"lastMessageId",
+				"senderId messageType content mediaId createdAt",
+			)
+			.lean<PopulatedChatDocument[]>();
+
+		const hasMore = docs.length > limit;
+		const pageDocs = docs.slice(0, limit);
+
+		const items = pageDocs.map((doc) => this.toDomain(doc as ChatDocument));
+		const users = collectUsersFromChats(pageDocs);
+		const lastMessages = collectLastMessages(pageDocs);
+		const lastDoc = pageDocs[pageDocs.length - 1];
 
 		return {
-			...this.buildPaginatedResult(items, total, page, limit),
+			items,
 			users,
 			lastMessages,
+			limit,
+			hasMore,
+			nextCursor:
+				hasMore && lastDoc
+					? encodeCursor(lastDoc.updatedAt, lastDoc._id.toString())
+					: null,
 		};
 	}
 }
+
+const encodeCursor = (timestamp: Date, id: string): string =>
+	Buffer.from(
+		JSON.stringify({ timestamp: timestamp.toISOString(), id }),
+	).toString("base64url");
+
+const decodeCursor = (
+	cursor: string | null,
+): { timestamp: Date; id: string } | null => {
+	if (!cursor) return null;
+
+	try {
+		const parsed = JSON.parse(
+			Buffer.from(cursor, "base64url").toString("utf8"),
+		) as {
+			timestamp?: string;
+			id?: string;
+		};
+
+		if (!parsed.timestamp || !parsed.id || !Types.ObjectId.isValid(parsed.id)) {
+			return null;
+		}
+
+		const timestamp = new Date(parsed.timestamp);
+		if (Number.isNaN(timestamp.getTime())) return null;
+
+		return { timestamp, id: parsed.id };
+	} catch {
+		return null;
+	}
+};

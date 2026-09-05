@@ -82,7 +82,7 @@ export class UpdateMentorProfileUseCase implements IUpdateMentorProfileUseCase {
 			const selectedInterests = await Promise.all(
 				areasOfExpertise.map(async (interestId) => {
 					const interest = await this._interestRepository.findById(interestId);
-					return interest && interest.isActive ? interest : null;
+					return interest?.isActive ? interest : null;
 				}),
 			);
 

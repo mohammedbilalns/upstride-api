@@ -23,10 +23,10 @@ export interface IChatRepository
 		user1Id: string,
 		user2Id: string,
 	): Promise<{ chat: Chat | null; users: ChatUserSummary[] }>;
-	paginateByUserWithUsers(
+	listByUserWithUsers(
 		userId: string,
 		filter: "read" | "unread" | "all",
-		page: number,
+		cursor: string | null,
 		limit: number,
 	): Promise<{
 		items: Chat[];
@@ -42,9 +42,8 @@ export interface IChatRepository
 				createdAt: Date;
 			}
 		>;
-		total: number;
-		page: number;
 		limit: number;
-		totalPages: number;
+		nextCursor: string | null;
+		hasMore: boolean;
 	}>;
 }

@@ -19,6 +19,7 @@ import {
 	VerifyRegistrationOtpUseCase,
 	VerifyResetPasswordOtpUseCase,
 } from "../../application/modules/authentication/use-cases";
+import { DummyLoginUseCase } from "../../application/modules/authentication/use-cases/login/dummy-login.use-case";
 import { TYPES } from "../../shared/types/types";
 
 export const registerAuthenticationBindings = (container: Container): void => {
@@ -87,5 +88,9 @@ export const registerAuthenticationBindings = (container: Container): void => {
 	container
 		.bind(TYPES.UseCases.GetActiveSessions)
 		.to(GetActiveSessionsUseCase)
+		.inSingletonScope();
+	container
+		.bind(TYPES.UseCases.DummyLogin)
+		.to(DummyLoginUseCase)
 		.inSingletonScope();
 };

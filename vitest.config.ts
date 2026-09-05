@@ -12,5 +12,6 @@ export default defineConfig({
 			provider: "v8",
 			reporter: ["text", "html"],
 		},
+		exclude: ["dist/**", "node_modules/**"],
 	},
 });
