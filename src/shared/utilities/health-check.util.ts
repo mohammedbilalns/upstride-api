@@ -1,4 +1,5 @@
 import type { Queue } from "bullmq";
+import type { Redis } from "ioredis";
 import mongoose from "mongoose";
 import { redisClient } from "../../infrastructure/database/redis/redis.connection";
 import { notificationQueue } from "../../main/di/queues.di";
@@ -93,7 +94,10 @@ const checkQueue = async (
 			Promise.resolve(queue.client),
 			HEALTH_CHECK_TIMEOUT_MS,
 		);
-		await withTimeout(client.ping(), HEALTH_CHECK_TIMEOUT_MS);
+		await withTimeout(
+			(client as unknown as Redis).ping(),
+			HEALTH_CHECK_TIMEOUT_MS,
+		);
 		return { status: "up", latencyMs: Date.now() - start };
 	} catch (error) {
 		return {

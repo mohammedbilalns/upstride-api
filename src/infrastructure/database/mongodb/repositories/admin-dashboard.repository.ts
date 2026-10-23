@@ -1,5 +1,6 @@
 import { injectable } from "inversify";
 import { Types } from "mongoose";
+import type { PaymentStatus } from "../../../../domain/entities/payment-transactions.entity";
 import type {
 	AdminDashboardChartQuery,
 	AdminDashboardMetricSource,
@@ -374,7 +375,7 @@ export class MongoAdminDashboardRepository
 
 		return PaymentTransactionModel.find(
 			{
-				status: { $in: ["completed", "refunded"] },
+				status: { $in: ["completed", "refunded"] as PaymentStatus[] },
 				$or: [
 					{ transactionOwner: "platform" },
 					{ transactionOwner: "user", purpose: "coins" },

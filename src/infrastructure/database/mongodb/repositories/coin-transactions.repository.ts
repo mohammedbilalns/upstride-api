@@ -120,7 +120,11 @@ export class MongoCoinTransactionRepository
 				{ transactionOwner: "user" },
 				{ transactionOwner: { $exists: false } },
 				{ transactionOwner: null },
-				{ transactionOwner: "" },
+				{
+					transactionOwner: "" as unknown as NonNullable<
+						CoinTransactionDocument["transactionOwner"]
+					>,
+				},
 			];
 		}
 
