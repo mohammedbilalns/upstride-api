@@ -33,7 +33,7 @@ export class UpdateArticleCommentUseCase
 		input: UpdateArticleCommentInput,
 	): Promise<UpdateArticleCommentOutput> {
 		const comment = await this._commentRepository.findById(input.commentId);
-		if (!comment || !comment.isActive) {
+		if (!comment?.isActive) {
 			throw new ArticleCommentNotFoundError();
 		}
 

@@ -78,7 +78,7 @@ export class ArticleController {
 
 	getArticles = asyncHandler(
 		async (req: AuthenticatedRequest, res: Response) => {
-			const query = req.validated?.query as ArticlesQuery;
+			const query = req.validated.query as ArticlesQuery;
 			const isAdminView =
 				req.user?.role === "ADMIN" || req.user?.role === "SUPER_ADMIN";
 
@@ -101,7 +101,7 @@ export class ArticleController {
 
 	getMentorArticles = asyncHandler(
 		async (req: AuthenticatedRequest, res: Response) => {
-			const query = req.validated?.query as MentorArticlesQuery;
+			const query = req.validated.query as MentorArticlesQuery;
 
 			const isAdminView =
 				req.user?.role === "ADMIN" || req.user?.role === "SUPER_ADMIN";
@@ -121,7 +121,7 @@ export class ArticleController {
 			const isAdminView =
 				req.user?.role === "ADMIN" || req.user?.role === "SUPER_ADMIN";
 			const data = await this._getArticleUseCase.execute({
-				...(req.validated?.params as GetArticleParam),
+				...(req.validated.params as GetArticleParam),
 				viewerUserId: req.user?.id,
 				isAdminView,
 			});
@@ -131,7 +131,7 @@ export class ArticleController {
 
 	getArticleForEdit = asyncHandler(
 		async (req: AuthenticatedRequest, res: Response) => {
-			const { articleId } = req.validated?.params as ArticleIdParam;
+			const { articleId } = req.validated.params as ArticleIdParam;
 			const result = await this._getArticlesUseCase.execute({
 				page: 1,
 				isMentorView: true,
@@ -152,7 +152,7 @@ export class ArticleController {
 		async (req: AuthenticatedRequest, res: Response) => {
 			const data = await this._createArticleUseCase.execute({
 				userId: req.user.id,
-				...(req.validated?.body as CreateArticleBody),
+				...(req.validated.body as CreateArticleBody),
 			});
 			return sendSuccess(res, HttpStatus.CREATED, { data });
 		},
@@ -160,12 +160,12 @@ export class ArticleController {
 
 	updateArticle = asyncHandler(
 		async (req: AuthenticatedRequest, res: Response) => {
-			const { articleId } = req.validated?.params as ArticleIdParam;
+			const { articleId } = req.validated.params as ArticleIdParam;
 
 			const data = await this._updateArticleUseCase.execute({
 				userId: req.user.id,
 				articleId,
-				...(req.validated?.body as UpdateArticleBody),
+				...(req.validated.body as UpdateArticleBody),
 			});
 			return sendSuccess(res, HttpStatus.OK, { data });
 		},
@@ -175,7 +175,7 @@ export class ArticleController {
 		async (req: AuthenticatedRequest, res: Response) => {
 			await this._deleteArticleUseCase.execute({
 				userId: req.user.id,
-				...(req.validated?.params as ArticleIdParam),
+				...(req.validated.params as ArticleIdParam),
 			});
 			return sendSuccess(res, HttpStatus.OK);
 		},
@@ -185,8 +185,8 @@ export class ArticleController {
 		async (req: AuthenticatedRequest, res: Response) => {
 			const data = await this._createArticleCommentUseCase.execute({
 				userId: req.user.id,
-				...(req.validated?.params as ArticleIdParam),
-				...(req.validated?.body as CreateCommentBody),
+				...(req.validated.params as ArticleIdParam),
+				...(req.validated.body as CreateCommentBody),
 			});
 			return sendSuccess(res, HttpStatus.CREATED, { data });
 		},
@@ -196,8 +196,8 @@ export class ArticleController {
 		async (req: AuthenticatedRequest, res: Response) => {
 			const data = await this._updateArticleCommentUseCase.execute({
 				userId: req.user.id,
-				...(req.validated?.params as CommentIdParam),
-				...(req.validated?.body as UpdateCommentBody),
+				...(req.validated.params as CommentIdParam),
+				...(req.validated.body as UpdateCommentBody),
 			});
 			return sendSuccess(res, HttpStatus.OK, { data });
 		},
@@ -207,7 +207,7 @@ export class ArticleController {
 		async (req: AuthenticatedRequest, res: Response) => {
 			await this._deleteArticleCommentUseCase.execute({
 				userId: req.user.id,
-				...(req.validated?.params as CommentIdParam),
+				...(req.validated.params as CommentIdParam),
 			});
 			return sendSuccess(res, HttpStatus.OK);
 		},
@@ -216,8 +216,8 @@ export class ArticleController {
 	getComments = asyncHandler(
 		async (req: AuthenticatedRequest, res: Response) => {
 			const data = await this._getArticleCommentsUseCase.execute({
-				...(req.validated?.params as ArticleIdParam),
-				...(req.validated?.query as CommentsQuery),
+				...(req.validated.params as ArticleIdParam),
+				...(req.validated.query as CommentsQuery),
 			});
 			return sendSuccess(res, HttpStatus.OK, { data });
 		},
@@ -227,8 +227,8 @@ export class ArticleController {
 		async (req: AuthenticatedRequest, res: Response) => {
 			const data = await this._reactToArticleUseCase.execute({
 				userId: req.user.id,
-				...(req.validated?.params as ArticleIdParam),
-				...(req.validated?.body as ReactBody),
+				...(req.validated.params as ArticleIdParam),
+				...(req.validated.body as ReactBody),
 			});
 			return sendSuccess(res, HttpStatus.OK, { data });
 		},
@@ -238,8 +238,8 @@ export class ArticleController {
 		async (req: AuthenticatedRequest, res: Response) => {
 			const data = await this._reactToArticleCommentUseCase.execute({
 				userId: req.user.id,
-				...(req.validated?.body as ReactBody),
-				...(req.validated?.params as CommentIdParam),
+				...(req.validated.body as ReactBody),
+				...(req.validated.params as CommentIdParam),
 			});
 			return sendSuccess(res, HttpStatus.OK, { data });
 		},
@@ -249,8 +249,8 @@ export class ArticleController {
 		async (req: AuthenticatedRequest, res: Response) => {
 			await this._submitArticleAppealUseCase.execute({
 				userId: req.user.id,
-				...(req.validated?.params as ArticleIdParam),
-				...(req.validated?.body as AppealArticleBody),
+				...(req.validated.params as ArticleIdParam),
+				...(req.validated.body as AppealArticleBody),
 			});
 
 			return sendSuccess(res, HttpStatus.OK, {

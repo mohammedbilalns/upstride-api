@@ -5,6 +5,7 @@ import type {
 } from "../../../application/modules/storage/use-cases";
 import { HttpStatus } from "../../../shared/constants";
 import { TYPES } from "../../../shared/types/types";
+import type { ValidatedRequest } from "../../../shared/types/validated-request.type";
 import { FileResponseMessages } from "../constants";
 import { asyncHandler, sendSuccess } from "../helpers";
 import type {
@@ -21,9 +22,9 @@ export class FileController {
 		private readonly _deleteFileUseCase: DeleteFileUseCase,
 	) {}
 
-	getPreSignedUploadUrl = asyncHandler(async (req, res) => {
+	getPreSignedUploadUrl = asyncHandler(async (req: ValidatedRequest, res) => {
 		const result = await this._getPreSignedUploadUrlUseCase.execute(
-			req.validated?.body as GetPreSignedUploadUrlBody,
+			req.validated.body as GetPreSignedUploadUrlBody,
 		);
 
 		return sendSuccess(res, HttpStatus.OK, {
@@ -32,9 +33,9 @@ export class FileController {
 		});
 	});
 
-	deleteFile = asyncHandler(async (req, res) => {
+	deleteFile = asyncHandler(async (req: ValidatedRequest, res) => {
 		await this._deleteFileUseCase.execute(
-			(req.validated?.body as DeleteFileBodyPayload).key,
+			(req.validated.body as DeleteFileBodyPayload).key,
 		);
 
 		return sendSuccess(res, HttpStatus.OK, {

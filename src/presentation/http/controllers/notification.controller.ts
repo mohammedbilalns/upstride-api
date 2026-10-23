@@ -38,7 +38,7 @@ export class NotificationController {
 		async (req: AuthenticatedRequest, res) => {
 			await this._registerPushSubscriptionUseCase.execute({
 				userId: req.user.id,
-				...(req.validated?.body as RegisterPushSubscriptionBody),
+				...(req.validated.body as RegisterPushSubscriptionBody),
 			});
 
 			return sendSuccess(res, HttpStatus.OK, {
@@ -51,7 +51,7 @@ export class NotificationController {
 		async (req: AuthenticatedRequest, res) => {
 			await this._unregisterPushSubscriptionUseCase.execute({
 				userId: req.user.id,
-				...(req.validated?.body as RegisterPushSubscriptionBody),
+				...(req.validated.body as RegisterPushSubscriptionBody),
 			});
 
 			return sendSuccess(res, HttpStatus.OK, {
@@ -63,7 +63,7 @@ export class NotificationController {
 	getNotifications = asyncHandler(async (req: AuthenticatedRequest, res) => {
 		const result = await this._getNotificationsUseCase.execute({
 			userId: req.user.id,
-			...(req.validated?.query as NotificationsQuery),
+			...(req.validated.query as NotificationsQuery),
 		});
 
 		return sendSuccess(res, HttpStatus.OK, { data: result });
@@ -72,7 +72,7 @@ export class NotificationController {
 	markRead = asyncHandler(async (req: AuthenticatedRequest, res) => {
 		const result = await this._markNotificationReadUseCase.execute({
 			userId: req.user.id,
-			...(req.validated?.params as NotificationIdParam),
+			...(req.validated.params as NotificationIdParam),
 		});
 
 		return sendSuccess(res, HttpStatus.OK, { data: result });

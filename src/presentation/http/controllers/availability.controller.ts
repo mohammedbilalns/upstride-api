@@ -44,7 +44,7 @@ export class AvailabilityController {
 	createAvailability = asyncHandler(async (req: AuthenticatedRequest, res) => {
 		const result = await this._createAvailabilityUseCase.execute({
 			userId: req.user.id,
-			...(req.validated?.body as CreateAvailabilityBody),
+			...(req.validated.body as CreateAvailabilityBody),
 		});
 
 		return sendSuccess(res, HttpStatus.CREATED, {
@@ -57,7 +57,7 @@ export class AvailabilityController {
 		async (req: AuthenticatedRequest, res) => {
 			const result = await this._checkAndCreateAvailabilityUseCase.execute({
 				userId: req.user.id,
-				...(req.validated?.body as CreateAvailabilityBody),
+				...(req.validated.body as CreateAvailabilityBody),
 			});
 
 			if (result.created) {
@@ -76,9 +76,9 @@ export class AvailabilityController {
 
 	updateAvailability = asyncHandler(async (req: AuthenticatedRequest, res) => {
 		const result = await this._updateAvailabilityUseCase.execute({
-			availabilityId: (req.validated?.params as UpdateAvailabilityParams).id,
+			availabilityId: (req.validated.params as UpdateAvailabilityParams).id,
 			userId: req.user.id,
-			...(req.validated?.body as UpdateAvailabiltyBody),
+			...(req.validated.body as UpdateAvailabiltyBody),
 		});
 
 		return sendSuccess(res, HttpStatus.OK, {
@@ -90,9 +90,9 @@ export class AvailabilityController {
 	checkAndUpdateAvailability = asyncHandler(
 		async (req: AuthenticatedRequest, res) => {
 			const result = await this._checkAndUpdateAvailabilityUseCase.execute({
-				availabilityId: (req.validated?.params as UpdateAvailabilityParams).id,
+				availabilityId: (req.validated.params as UpdateAvailabilityParams).id,
 				userId: req.user.id,
-				...(req.validated?.body as UpdateAvailabiltyBody),
+				...(req.validated.body as UpdateAvailabiltyBody),
 			});
 
 			if (result.updated) {
@@ -111,7 +111,7 @@ export class AvailabilityController {
 
 	deleteAvailability = asyncHandler(async (req: AuthenticatedRequest, res) => {
 		await this._deleteAvailabilityUseCase.execute({
-			availabilityId: (req.validated?.params as AvailabilityIdParam).id,
+			availabilityId: (req.validated.params as AvailabilityIdParam).id,
 			userId: req.user.id,
 		});
 
@@ -123,7 +123,7 @@ export class AvailabilityController {
 	reenableAvailability = asyncHandler(
 		async (req: AuthenticatedRequest, res) => {
 			await this._reenableAvailabilityUseCase.execute({
-				availabilityId: (req.validated?.params as AvailabilityIdParam).id,
+				availabilityId: (req.validated.params as AvailabilityIdParam).id,
 				userId: req.user.id,
 			});
 
@@ -136,7 +136,7 @@ export class AvailabilityController {
 	checkAndReenableAvailability = asyncHandler(
 		async (req: AuthenticatedRequest, res) => {
 			const result = await this._checkAndReenableAvailabilityUseCase.execute({
-				availabilityId: (req.validated?.params as AvailabilityIdParam).id,
+				availabilityId: (req.validated.params as AvailabilityIdParam).id,
 				userId: req.user.id,
 			});
 
@@ -158,7 +158,7 @@ export class AvailabilityController {
 		async (req: AuthenticatedRequest, res) => {
 			const result = await this._getMentorAvailabilitiesUseCase.execute({
 				userId: req.user.id,
-				...(req.validated?.query as GetMentorAvailabilitiesQuery),
+				...(req.validated.query as GetMentorAvailabilitiesQuery),
 			});
 
 			return sendSuccess(res, HttpStatus.OK, {

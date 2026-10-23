@@ -68,7 +68,7 @@ export class UpdateMentorProfileUseCase implements IUpdateMentorProfileUseCase {
 		if (currentRoleId !== undefined) {
 			const currentRole =
 				await this._professionRepository.findById(currentRoleId);
-			if (!currentRole || !currentRole.isActive) {
+			if (!currentRole?.isActive) {
 				throw new ValidationError("Selected current role is invalid");
 			}
 			updates.currentRoleId = currentRoleId;

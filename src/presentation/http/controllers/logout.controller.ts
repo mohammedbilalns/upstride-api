@@ -46,7 +46,7 @@ export class LogoutController {
 	revokeSession = asyncHandler(async (req: AuthenticatedRequest, res) => {
 		await this._revokeSessionUseCase.execute({
 			requesterUserId: req.user.id,
-			...(req.validated?.body as RevokeSessionBody),
+			...(req.validated.body as RevokeSessionBody),
 		});
 
 		sendSuccess(res, HttpStatus.OK, {

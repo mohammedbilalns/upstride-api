@@ -43,8 +43,8 @@ export class ReportController {
 	reportArticle = asyncHandler(async (req: AuthenticatedRequest, res) => {
 		const result = await this._reportArticleUseCase.execute({
 			reporterId: req.user.id,
-			...(req.validated?.params as ReportArticleParam),
-			...(req.validated?.body as ReportBody),
+			...(req.validated.params as ReportArticleParam),
+			...(req.validated.body as ReportBody),
 		});
 
 		return sendSuccess(res, HttpStatus.CREATED, {
@@ -56,8 +56,8 @@ export class ReportController {
 	reportUser = asyncHandler(async (req: AuthenticatedRequest, res) => {
 		const result = await this._reportUserUseCase.execute({
 			reporterId: req.user.id,
-			targetUserId: (req.validated?.params as ReportUserParam).userId,
-			...(req.validated?.body as ReportBody),
+			targetUserId: (req.validated.params as ReportUserParam).userId,
+			...(req.validated.body as ReportBody),
 		});
 
 		return sendSuccess(res, HttpStatus.CREATED, {
@@ -69,7 +69,7 @@ export class ReportController {
 	getReports = asyncHandler(async (req: AuthenticatedRequest, res) => {
 		const result = await this._getReportsUseCase.execute({
 			adminId: req.user.id,
-			...(req.validated?.query as GetReportsQuery),
+			...(req.validated.query as GetReportsQuery),
 		});
 
 		return sendSuccess(res, HttpStatus.OK, {
@@ -81,8 +81,8 @@ export class ReportController {
 	updateStatus = asyncHandler(async (req: AuthenticatedRequest, res) => {
 		const result = await this._updateReportStatusUseCase.execute({
 			adminId: req.user.id,
-			...(req.validated?.params as ReportIdParam),
-			...(req.validated?.body as UpdateReportStatusBody),
+			...(req.validated.params as ReportIdParam),
+			...(req.validated.body as UpdateReportStatusBody),
 		});
 
 		return sendSuccess(res, HttpStatus.OK, {
@@ -93,9 +93,9 @@ export class ReportController {
 
 	blockArticle = asyncHandler(async (req: AuthenticatedRequest, res) => {
 		const result = await this._blockArticleUseCase.execute({
-			...(req.validated?.params as BlockArticleParam),
+			...(req.validated.params as BlockArticleParam),
 			adminId: req.user.id,
-			...(req.validated?.body as BlockArticleBody),
+			...(req.validated.body as BlockArticleBody),
 		});
 
 		return sendSuccess(res, HttpStatus.OK, {
@@ -107,7 +107,7 @@ export class ReportController {
 	unblockArticle = asyncHandler(async (req: AuthenticatedRequest, res) => {
 		const result = await this._unblockArticleUseCase.execute({
 			adminId: req.user.id,
-			...(req.validated?.params as BlockArticleParam),
+			...(req.validated.params as BlockArticleParam),
 		});
 
 		return sendSuccess(res, HttpStatus.OK, {

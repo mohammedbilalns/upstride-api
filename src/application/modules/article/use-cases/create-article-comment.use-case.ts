@@ -38,14 +38,14 @@ export class CreateArticleCommentUseCase
 		input: CreateArticleCommentInput,
 	): Promise<CreateArticleCommentOutput> {
 		const article = await this._articleRepository.findById(input.articleId);
-		if (!article || !article.isActive) {
+		if (!article?.isActive) {
 			throw new ArticleNotFoundError();
 		}
 
 		let parentId: string | null = null;
 		if (input.parentId !== undefined && input.parentId !== null) {
 			const parent = await this._commentRepository.findById(input.parentId);
-			if (!parent || !parent.isActive) {
+			if (!parent?.isActive) {
 				throw new ArticleCommentNotFoundError("Parent comment not found");
 			}
 			if (parent.articleId !== input.articleId) {

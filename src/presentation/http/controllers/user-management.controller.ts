@@ -5,6 +5,7 @@ import type {
 	IUnblockUserUseCase,
 } from "../../../application/modules/user-management/use-cases";
 import { HttpStatus } from "../../../shared/constants";
+import type { ValidatedRequest } from "../../../shared/types/validated-request.type";
 import { TYPES } from "../../../shared/types/types";
 import { UsersResponseMessages } from "../constants";
 import { asyncHandler, sendSuccess } from "../helpers";
@@ -25,9 +26,9 @@ export class UsersManagementController {
 		private _unblockUserUseCase: IUnblockUserUseCase,
 	) {}
 
-	getUsers = asyncHandler(async (req, res) => {
+	getUsers = asyncHandler(async (req: ValidatedRequest, res) => {
 		const data = await this._getUsersUseCase.execute({
-			...(req.validated?.query as UsersQuery),
+			...(req.validated.query as UsersQuery),
 		});
 
 		sendSuccess(res, HttpStatus.OK, {
@@ -36,10 +37,10 @@ export class UsersManagementController {
 		});
 	});
 
-	blockUser = asyncHandler(async (req, res) => {
+	blockUser = asyncHandler(async (req: ValidatedRequest, res) => {
 		const data = await this._blockUserUseCase.execute({
-			userId: (req.validated?.params as UserIdParam).id,
-			...(req.validated?.body as BlockUserBody),
+			userId: (req.validated.params as UserIdParam).id,
+			...(req.validated.body as BlockUserBody),
 		});
 
 		sendSuccess(res, HttpStatus.OK, {
@@ -48,9 +49,9 @@ export class UsersManagementController {
 		});
 	});
 
-	unblockUser = asyncHandler(async (req, res) => {
+	unblockUser = asyncHandler(async (req: ValidatedRequest, res) => {
 		const data = await this._unblockUserUseCase.execute({
-			userId: (req.validated?.params as UserIdParam).id,
+			userId: (req.validated.params as UserIdParam).id,
 		});
 
 		sendSuccess(res, HttpStatus.OK, {

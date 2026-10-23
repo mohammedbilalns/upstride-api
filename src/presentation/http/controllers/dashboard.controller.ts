@@ -30,7 +30,7 @@ export class DashboardController {
 	});
 
 	getActivityOverview = asyncHandler(async (req: AuthenticatedRequest, res) => {
-		const query = req.validated?.query as DashboardActivityOverviewQuery;
+		const query = req.validated.query as DashboardActivityOverviewQuery;
 		const data = await this._getDashboardActivityOverviewUseCase.execute({
 			userId: req.user.id,
 			role: req.user.role === "MENTOR" ? "MENTOR" : "USER",

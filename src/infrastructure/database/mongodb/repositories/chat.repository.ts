@@ -80,7 +80,7 @@ const collectLastMessages = (
 
 	for (const doc of docs) {
 		const last = doc.lastMessageId;
-		if (!last || !last._id) continue;
+		if (!last?._id) continue;
 		map[doc._id.toString()] = {
 			id: last._id.toString?.() ?? "",
 			senderId: last.senderId?.toString?.() ?? "",

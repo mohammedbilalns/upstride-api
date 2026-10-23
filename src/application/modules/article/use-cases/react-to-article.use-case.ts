@@ -28,7 +28,7 @@ export class ReactToArticleUseCase implements IReactToArticleUseCase {
 
 	async execute(input: ReactToArticleInput): Promise<ReactToArticleOutput> {
 		const article = await this._articleRepository.findById(input.articleId);
-		if (!article || !article.isActive) {
+		if (!article?.isActive) {
 			throw new ArticleNotFoundError();
 		}
 

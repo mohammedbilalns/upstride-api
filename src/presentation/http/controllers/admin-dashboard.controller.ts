@@ -7,6 +7,7 @@ import type {
 } from "../../../application/modules/admin-dashboard/use-cases";
 import { HttpStatus } from "../../../shared/constants/http-status-codes";
 import { TYPES } from "../../../shared/types/types";
+import type { ValidatedRequest } from "../../../shared/types/validated-request.type";
 import { RESPONSE_MESSAGES } from "../constants/response-messages";
 import { asyncHandler, sendSuccess } from "../helpers";
 import type { AdminDashboardChartQuery } from "../validators/admin-dashboard.validator";
@@ -33,8 +34,8 @@ export class AdminDashboardController {
 		});
 	});
 
-	getUserGrowth = asyncHandler(async (req, res) => {
-		const query = req.validated?.query as AdminDashboardChartQuery;
+	getUserGrowth = asyncHandler(async (req: ValidatedRequest, res) => {
+		const query = req.validated.query as AdminDashboardChartQuery;
 		const data = await this._getAdminDashboardUserGrowthUseCase.execute(query);
 
 		sendSuccess(res, HttpStatus.OK, {
@@ -43,8 +44,8 @@ export class AdminDashboardController {
 		});
 	});
 
-	getRevenueAnalytics = asyncHandler(async (req, res) => {
-		const query = req.validated?.query as AdminDashboardChartQuery;
+	getRevenueAnalytics = asyncHandler(async (req: ValidatedRequest, res) => {
+		const query = req.validated.query as AdminDashboardChartQuery;
 		const data =
 			await this._getAdminDashboardRevenueAnalyticsUseCase.execute(query);
 

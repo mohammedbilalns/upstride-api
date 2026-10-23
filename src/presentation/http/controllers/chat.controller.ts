@@ -33,7 +33,7 @@ export class ChatController {
 	getChats = asyncHandler(async (req: AuthenticatedRequest, res) => {
 		const result = await this._getChatsUseCase.execute({
 			userId: req.user.id,
-			...(req.validated?.query as ChatQuery),
+			...(req.validated.query as ChatQuery),
 		});
 
 		return sendSuccess(res, HttpStatus.OK, { data: result });
@@ -42,8 +42,8 @@ export class ChatController {
 	getChat = asyncHandler(async (req: AuthenticatedRequest, res) => {
 		const result = await this._getChatUseCase.execute({
 			userId: req.user.id,
-			...(req.validated?.params as GetChatParams),
-			...(req.validated?.query as GetChatQuery),
+			...(req.validated.params as GetChatParams),
+			...(req.validated.query as GetChatQuery),
 		});
 
 		return sendSuccess(res, HttpStatus.OK, { data: result });
@@ -51,8 +51,8 @@ export class ChatController {
 
 	sendMessage = asyncHandler(async (req: AuthenticatedRequest, res) => {
 		const result = await this._sendMessageUseCase.execute({
-			...(req.validated?.params as ChatIdParams),
-			...(req.validated?.body as SendMessageBody),
+			...(req.validated.params as ChatIdParams),
+			...(req.validated.body as SendMessageBody),
 			senderId: req.user.id,
 		});
 
@@ -61,7 +61,7 @@ export class ChatController {
 
 	markRead = asyncHandler(async (req: AuthenticatedRequest, res) => {
 		const result = await this._markMessagesReadUseCase.execute({
-			...(req.validated?.params as ChatIdParams),
+			...(req.validated.params as ChatIdParams),
 			readerId: req.user.id,
 		});
 

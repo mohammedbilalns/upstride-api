@@ -48,7 +48,7 @@ export class WalletController {
 	getCoinTransactions = asyncHandler(async (req: AuthenticatedRequest, res) => {
 		const data = await this._getCoinTransactionsUseCase.execute({
 			userId: req.user.id,
-			...(req.validated?.query as CoinTransactionsQuery),
+			...(req.validated.query as CoinTransactionsQuery),
 		});
 
 		sendSuccess(res, HttpStatus.OK, {
@@ -61,7 +61,7 @@ export class WalletController {
 		async (req: AuthenticatedRequest, res) => {
 			const data = await this._getPaymentTransactionsUseCase.execute({
 				userId: req.user.id,
-				...(req.validated?.query as PaymentTransactionsQuery),
+				...(req.validated.query as PaymentTransactionsQuery),
 			});
 
 			sendSuccess(res, HttpStatus.OK, {
@@ -83,7 +83,7 @@ export class WalletController {
 	getPlatformCoinTransactions = asyncHandler(
 		async (req: AuthenticatedRequest, res) => {
 			const data = await this._getPlatformCoinTransactionsUseCase.execute({
-				...(req.validated?.query as CoinTransactionsQuery),
+				...(req.validated.query as CoinTransactionsQuery),
 			});
 
 			sendSuccess(res, HttpStatus.OK, {
@@ -96,7 +96,7 @@ export class WalletController {
 	getPlatformPaymentTransactions = asyncHandler(
 		async (req: AuthenticatedRequest, res) => {
 			const data = await this._getPlatformPaymentTransactionsUseCase.execute({
-				...(req.validated?.query as PaymentTransactionsQuery),
+				...(req.validated.query as PaymentTransactionsQuery),
 			});
 
 			sendSuccess(res, HttpStatus.OK, {
