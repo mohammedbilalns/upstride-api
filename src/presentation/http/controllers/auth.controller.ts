@@ -13,6 +13,7 @@ import type { IDummyLoginUseCase } from "../../../application/modules/authentica
 import env from "../../../shared/config/env";
 import { HttpStatus } from "../../../shared/constants";
 import { TYPES } from "../../../shared/types/types";
+import type { ValidatedRequest } from "../../../shared/types/validated-request.type";
 import { extractDeviceInfo } from "../../../shared/utilities/extract-device-info.util";
 import { AuthResponseMessages } from "../constants";
 import { asyncHandler, sendSuccess } from "../helpers";
@@ -48,9 +49,9 @@ export class AuthController {
 		private _dummyLoginUseCase: IDummyLoginUseCase,
 	) {}
 
-	register = asyncHandler(async (req, res) => {
+	register = asyncHandler(async (req: ValidatedRequest, res) => {
 		await this._registerWithEmailUseCase.execute(
-			req.validated?.body as RegisterBody,
+			req.validated.body as RegisterBody,
 		);
 
 		sendSuccess(res, HttpStatus.CREATED, {
@@ -58,9 +59,9 @@ export class AuthController {
 		});
 	});
 
-	verifyRegisterOtp = asyncHandler(async (req, res) => {
+	verifyRegisterOtp = asyncHandler(async (req: ValidatedRequest, res) => {
 		const data = await this._verifyRegistrationOtpUseCase.execute({
-			...(req.validated?.body as VerifyOtpBody),
+			...(req.validated.body as VerifyOtpBody),
 		});
 
 		sendSuccess(res, HttpStatus.OK, {
@@ -69,9 +70,9 @@ export class AuthController {
 		});
 	});
 
-	resendRegisterOtp = asyncHandler(async (req, res) => {
+	resendRegisterOtp = asyncHandler(async (req: ValidatedRequest, res) => {
 		await this._resendRegistrationOtpUseCase.execute({
-			...(req.validated?.body as ResendOtpBody),
+			...(req.validated.body as ResendOtpBody),
 		});
 
 		sendSuccess(res, HttpStatus.OK, {
@@ -79,12 +80,12 @@ export class AuthController {
 		});
 	});
 
-	login = asyncHandler(async (req, res) => {
+	login = asyncHandler(async (req: ValidatedRequest, res) => {
 		const deviceInfo = extractDeviceInfo(req);
 
 		const { refreshToken, ...data } = await this._loginWithEmailUseCase.execute(
 			{
-				...(req.validated?.body as LoginBody),
+				...(req.validated.body as LoginBody),
 				...deviceInfo,
 			},
 		);
@@ -110,11 +111,11 @@ export class AuthController {
 		});
 	});
 
-	loginWithGoogle = asyncHandler(async (req, res) => {
+	loginWithGoogle = asyncHandler(async (req: ValidatedRequest, res) => {
 		const deviceInfo = extractDeviceInfo(req);
 		const data = await this._socialLoginUseCase.execute({
 			provider: "GOOGLE",
-			credential: (req.validated?.body as GoogleLoginBody).code,
+			credential: (req.validated.body as GoogleLoginBody).code,
 			...deviceInfo,
 		});
 
@@ -133,9 +134,9 @@ export class AuthController {
 		});
 	});
 
-	loginWithLinkedIn = asyncHandler(async (req, res) => {
+	loginWithLinkedIn = asyncHandler(async (req: ValidatedRequest, res) => {
 		const deviceInfo = extractDeviceInfo(req);
-		const body = req.validated?.body as LinkedInLoginBody;
+		const body = req.validated.body as LinkedInLoginBody;
 
 		const data = await this._socialLoginUseCase.execute({
 			provider: "LINKEDIN",
@@ -158,12 +159,12 @@ export class AuthController {
 		});
 	});
 
-	saveInterests = asyncHandler(async (req, res) => {
+	saveInterests = asyncHandler(async (req: ValidatedRequest, res) => {
 		const deviceInfo = extractDeviceInfo(req);
 
 		const { refreshToken, ...data } =
 			await this._saveUserInterestsUseCase.execute({
-				...(req.validated?.body as SaveInterestsBody),
+				...(req.validated.body as SaveInterestsBody),
 				...deviceInfo,
 			});
 

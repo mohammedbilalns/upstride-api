@@ -7,6 +7,7 @@ import type {
 } from "../../../application/modules/admin-management/use-cases";
 import { HttpStatus } from "../../../shared/constants";
 import { TYPES } from "../../../shared/types/types";
+import type { ValidatedRequest } from "../../../shared/types/validated-request.type";
 import { AdminsResponseMessages } from "../constants";
 import { asyncHandler, sendSuccess } from "../helpers";
 import type {
@@ -28,9 +29,9 @@ export class AdminManagementController {
 		private _unblockAdminUseCase: IUnblockAdminUseCase,
 	) {}
 
-	getAdmins = asyncHandler(async (req, res) => {
+	getAdmins = asyncHandler(async (req: ValidatedRequest, res) => {
 		const data = await this._getAdminsUseCase.execute({
-			...(req.validated?.query as AdminsQuery),
+			...(req.validated.query as AdminsQuery),
 		});
 
 		sendSuccess(res, HttpStatus.OK, {
@@ -39,9 +40,9 @@ export class AdminManagementController {
 		});
 	});
 
-	createAdmin = asyncHandler(async (req, res) => {
+	createAdmin = asyncHandler(async (req: ValidatedRequest, res) => {
 		const result = await this._createAdminUseCase.execute({
-			...(req.validated?.body as CreateAdminBody),
+			...(req.validated.body as CreateAdminBody),
 		});
 
 		sendSuccess(res, HttpStatus.CREATED, {
@@ -50,9 +51,9 @@ export class AdminManagementController {
 		});
 	});
 
-	blockAdmin = asyncHandler(async (req, res) => {
+	blockAdmin = asyncHandler(async (req: ValidatedRequest, res) => {
 		await this._blockAdminUseCase.execute({
-			adminId: (req.validated?.params as AdminIdParam).id,
+			adminId: (req.validated.params as AdminIdParam).id,
 		});
 
 		sendSuccess(res, HttpStatus.OK, {
@@ -60,9 +61,9 @@ export class AdminManagementController {
 		});
 	});
 
-	unblockAdmin = asyncHandler(async (req, res) => {
+	unblockAdmin = asyncHandler(async (req: ValidatedRequest, res) => {
 		await this._unblockAdminUseCase.execute({
-			adminId: (req.validated?.params as AdminIdParam).id,
+			adminId: (req.validated.params as AdminIdParam).id,
 		});
 
 		sendSuccess(res, HttpStatus.OK, {

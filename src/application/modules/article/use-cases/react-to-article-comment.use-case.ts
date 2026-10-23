@@ -35,12 +35,12 @@ export class ReactToArticleCommentUseCase
 		input: ReactToArticleCommentInput,
 	): Promise<ReactToArticleCommentOutput> {
 		const comment = await this._commentRepository.findById(input.commentId);
-		if (!comment || !comment.isActive) {
+		if (!comment?.isActive) {
 			throw new ArticleCommentNotFoundError();
 		}
 
 		const article = await this._articleRepository.findById(comment.articleId);
-		if (!article || !article.isActive) {
+		if (!article?.isActive) {
 			throw new ArticleCommentNotFoundError();
 		}
 

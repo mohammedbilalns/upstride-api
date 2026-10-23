@@ -27,7 +27,7 @@ export class PaymentController {
 
 	createCheckoutSession = asyncHandler(
 		async (req: AuthenticatedRequest, res) => {
-			const coinsBody = (req.validated?.body ??
+			const coinsBody = (req.validated.body ??
 				req.body) as CreateCheckoutSessionBody;
 			const { coins } = coinsBody;
 			const userId = req.user.id;

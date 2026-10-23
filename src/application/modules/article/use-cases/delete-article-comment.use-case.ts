@@ -29,7 +29,7 @@ export class DeleteArticleCommentUseCase
 		input: DeleteArticleCommentInput,
 	): Promise<DeleteArticleCommentOutput> {
 		const comment = await this._commentRepository.findById(input.commentId);
-		if (!comment || !comment.isActive) {
+		if (!comment?.isActive) {
 			throw new ArticleCommentNotFoundError();
 		}
 

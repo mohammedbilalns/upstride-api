@@ -58,8 +58,8 @@ export class BookingController {
 
 	getAvailableSlots = asyncHandler(async (req: AuthenticatedRequest, res) => {
 		const result = await this._getAvailableSlotsUseCase.execute({
-			...(req.validated?.params as GetAvaialableSlotsParams),
-			...(req.validated?.query as GetAvailableSlotsQuery),
+			...(req.validated.params as GetAvaialableSlotsParams),
+			...(req.validated.query as GetAvailableSlotsQuery),
 			requesterUserId: req.user.id,
 		});
 
@@ -72,7 +72,7 @@ export class BookingController {
 	createBooking = asyncHandler(async (req: AuthenticatedRequest, res) => {
 		const result = await this._createBookingUseCase.execute({
 			menteeId: req.user.id,
-			...(req.validated?.body as CreateBookingBody),
+			...(req.validated.body as CreateBookingBody),
 		});
 
 		return sendSuccess(res, HttpStatus.CREATED, {
@@ -87,8 +87,8 @@ export class BookingController {
 	cancelBooking = asyncHandler(async (req: AuthenticatedRequest, res) => {
 		const result = await this._cancelBookingUseCase.execute({
 			userId: req.user.id,
-			bookingId: (req.validated?.params as CancelBookingParams).id,
-			...(req.validated?.body as CancellBookingBody),
+			bookingId: (req.validated.params as CancelBookingParams).id,
+			...(req.validated.body as CancellBookingBody),
 		});
 
 		return sendSuccess(res, HttpStatus.OK, {
@@ -101,8 +101,8 @@ export class BookingController {
 		async (req: AuthenticatedRequest, res) => {
 			const result = await this._cancelBookingByMentorUseCase.execute({
 				userId: req.user.id,
-				bookingId: (req.validated?.params as CancelBookingParams).id,
-				...(req.validated?.body as CancellBookingBody),
+				bookingId: (req.validated.params as CancelBookingParams).id,
+				...(req.validated.body as CancellBookingBody),
 			});
 
 			return sendSuccess(res, HttpStatus.OK, {
@@ -115,7 +115,7 @@ export class BookingController {
 	repayBooking = asyncHandler(async (req: AuthenticatedRequest, res) => {
 		const result = await this._repayBookingUseCase.execute({
 			userId: req.user.id,
-			bookingId: (req.validated?.params as RepayBookingParams).id,
+			bookingId: (req.validated.params as RepayBookingParams).id,
 		});
 
 		return sendSuccess(res, HttpStatus.OK, {
@@ -127,7 +127,7 @@ export class BookingController {
 	getUserBookings = asyncHandler(async (req: AuthenticatedRequest, res) => {
 		const result = await this._getUserBookingsUseCase.execute({
 			userId: req.user.id,
-			...(req.validated?.query as BookingListQuery),
+			...(req.validated.query as BookingListQuery),
 		});
 
 		return sendSuccess(res, HttpStatus.OK, {
@@ -138,7 +138,7 @@ export class BookingController {
 	getMentorBookings = asyncHandler(async (req: AuthenticatedRequest, res) => {
 		const result = await this._getMentorBookingsUseCase.execute({
 			userId: req.user.id,
-			...(req.validated?.query as BookingListQuery),
+			...(req.validated.query as BookingListQuery),
 		});
 
 		return sendSuccess(res, HttpStatus.OK, {
@@ -149,7 +149,7 @@ export class BookingController {
 	getBookingDetails = asyncHandler(async (req: AuthenticatedRequest, res) => {
 		const result = await this._getBookingDetailsUseCase.execute({
 			userId: req.user.id,
-			bookingId: (req.validated?.params as BookingDetailsParams).id,
+			bookingId: (req.validated.params as BookingDetailsParams).id,
 		});
 
 		return sendSuccess(res, HttpStatus.OK, {
@@ -160,7 +160,7 @@ export class BookingController {
 	feedBackUser = asyncHandler(async (req: AuthenticatedRequest, res) => {
 		await this._createFeedbackUseCase.execute({
 			mentorId: req.user.id,
-			...(req.validated?.body as FeedBackBody),
+			...(req.validated.body as FeedBackBody),
 		});
 
 		return sendSuccess(res, HttpStatus.OK, {
@@ -185,8 +185,8 @@ export class BookingController {
 	});
 
 	rescheduleBooking = asyncHandler(async (req: AuthenticatedRequest, res) => {
-		const bookingId = (req.validated?.params as RescheduleBookingParams).id;
-		const body = req.validated?.body as RescheduleBookingBody;
+		const bookingId = (req.validated.params as RescheduleBookingParams).id;
+		const body = req.validated.body as RescheduleBookingBody;
 
 		await this._rescheduleBookingUseCase.execute({
 			bookingId,

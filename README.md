@@ -8,21 +8,21 @@ It powers a complete mentorship ecosystem with secure authentication, mentor dis
 
 ## Features
 
-* User authentication and authorization
-* Mentor profile and discovery
-* Session scheduling and booking
-* Live call session handling
-* Article publishing platform
-* Comments and reactions
-* Content reporting and moderation
-* Stripe payment integration
-* Wallet and transaction management
-* Session settlement and refunds
-* Media uploads with AWS S3
-* Background job processing
-* Redis caching
-* Event-driven architecture
-* Worker-based asynchronous processing
+- User authentication and authorization
+- Mentor profile and discovery
+- Session scheduling and booking
+- Live call session handling
+- Article publishing platform
+- Comments and reactions
+- Content reporting and moderation
+- Stripe payment integration
+- Wallet and transaction management
+- Session settlement and refunds
+- Media uploads with AWS S3
+- Background job processing
+- Redis caching
+- Event-driven architecture
+- Worker-based asynchronous processing
 
 ---
 
@@ -30,31 +30,31 @@ It powers a complete mentorship ecosystem with secure authentication, mentor dis
 
 ### Backend
 
-* Node.js
-* TypeScript
-* Express.js
-* MongoDB
-* Mongoose
-* InversifyJS
-* Zod
-* Socket.IO
-* Redis
-* Stripe
-* AWS S3
+- Node.js
+- TypeScript
+- Express.js
+- MongoDB
+- Mongoose
+- InversifyJS
+- Zod
+- Socket.IO
+- Redis
+- Stripe
+- AWS S3
 
 ### Development Tools
 
-* Docker
+- Docker
 
 ---
 
 ## Architecture
 
-* Clean Architecture
-* Repository Pattern
-* Event-Driven Architecture
-* Dependency Injection
-* SOLID Principles
+- Clean Architecture
+- Repository Pattern
+- Event-Driven Architecture
+- Dependency Injection
+- SOLID Principles
 
 ---
 

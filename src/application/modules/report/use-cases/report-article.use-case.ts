@@ -37,7 +37,7 @@ export class ReportArticleUseCase implements IReportArticleUseCase {
 			throw new UserNotFoundError();
 		}
 
-		if (!article || !article.isActive || article.isArchived) {
+		if (!article?.isActive || article.isArchived) {
 			throw new ArticleNotFoundError();
 		}
 

@@ -122,4 +122,5 @@ router.post(
 	ROUTES.AUTH.REVOKE_ALL_OTHER_SESSIONS,
 	logoutController.revokeAllOtherSessions,
 );
+
 export { router as authRouter };

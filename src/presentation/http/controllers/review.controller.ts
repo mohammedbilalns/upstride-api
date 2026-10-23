@@ -25,8 +25,8 @@ export class ReviewController {
 	createReview = asyncHandler(async (req: AuthenticatedRequest, res) => {
 		const result = await this._createReviewUseCase.execute({
 			userId: req.user.id,
-			bookingId: (req.validated?.params as ReviewBookingParam).bookingId,
-			...(req.validated?.body as CreateReviewBody),
+			bookingId: (req.validated.params as ReviewBookingParam).bookingId,
+			...(req.validated.body as CreateReviewBody),
 		});
 
 		return sendSuccess(res, HttpStatus.CREATED, {
@@ -37,8 +37,8 @@ export class ReviewController {
 
 	getMentorReviews = asyncHandler(async (req: AuthenticatedRequest, res) => {
 		const result = await this._getMentorReviewsUseCase.execute({
-			mentorId: (req.validated?.params as ReviewMentorParam).mentorId,
-			...(req.validated?.query as MentorReviewsQuery),
+			mentorId: (req.validated.params as ReviewMentorParam).mentorId,
+			...(req.validated.query as MentorReviewsQuery),
 		});
 
 		return sendSuccess(res, HttpStatus.OK, {

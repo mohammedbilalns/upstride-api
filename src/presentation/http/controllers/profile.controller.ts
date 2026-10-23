@@ -61,7 +61,7 @@ export class ProfileController {
 	updateProfile = asyncHandler(async (req: AuthenticatedRequest, res) => {
 		const userId = req.user.id;
 		const result = await this._updateProfileUseCase.execute({
-			...(req.validated?.body as UpdateProfileBody),
+			...(req.validated.body as UpdateProfileBody),
 			userId,
 		});
 
@@ -76,7 +76,7 @@ export class ProfileController {
 			const userId = req.user.id;
 
 			await this._requestChangePasswordUseCase.execute({
-				...(req.validated?.body as RequestChangePasswordBody),
+				...(req.validated.body as RequestChangePasswordBody),
 				userId,
 			});
 
@@ -92,7 +92,7 @@ export class ProfileController {
 
 			const result = await this._verifyChangePasswordOtpUseCase.execute({
 				userId,
-				...(req.validated?.body as VerifyProfileOtpBody),
+				...(req.validated.body as VerifyProfileOtpBody),
 			});
 
 			return sendSuccess(res, HttpStatus.OK, {
@@ -106,7 +106,7 @@ export class ProfileController {
 		const userId = req.user.id;
 
 		await this._changePasswordUseCase.execute({
-			...(req.validated?.body as ChangePasswordBody),
+			...(req.validated.body as ChangePasswordBody),
 			userId,
 		});
 
