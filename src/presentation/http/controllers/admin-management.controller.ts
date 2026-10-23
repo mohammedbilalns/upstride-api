@@ -6,8 +6,8 @@ import type {
 	IUnblockAdminUseCase,
 } from "../../../application/modules/admin-management/use-cases";
 import { HttpStatus } from "../../../shared/constants";
-import type { ValidatedRequest } from "../../../shared/types/validated-request.type";
 import { TYPES } from "../../../shared/types/types";
+import type { ValidatedRequest } from "../../../shared/types/validated-request.type";
 import { AdminsResponseMessages } from "../constants";
 import { asyncHandler, sendSuccess } from "../helpers";
 import type {

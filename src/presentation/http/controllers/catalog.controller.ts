@@ -17,8 +17,8 @@ import type { IUpdateInterestUseCase } from "../../../application/modules/catalo
 import type { IUpdateProfessionUseCase } from "../../../application/modules/catalog/use-cases/update-profession.use-case.interface";
 import type { IUpdateSkillUseCase } from "../../../application/modules/catalog/use-cases/update-skill.use-case.interface";
 import { HttpStatus } from "../../../shared/constants";
-import type { ValidatedRequest } from "../../../shared/types/validated-request.type";
 import { TYPES } from "../../../shared/types/types";
+import type { ValidatedRequest } from "../../../shared/types/validated-request.type";
 import { CatalogResponseMessages } from "../constants";
 import { asyncHandler, sendSuccess } from "../helpers";
 import type {

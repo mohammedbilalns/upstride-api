@@ -12,8 +12,8 @@ import type {
 import type { IDummyLoginUseCase } from "../../../application/modules/authentication/use-cases/login/dummy-login.use-case.interface";
 import env from "../../../shared/config/env";
 import { HttpStatus } from "../../../shared/constants";
-import type { ValidatedRequest } from "../../../shared/types/validated-request.type";
 import { TYPES } from "../../../shared/types/types";
+import type { ValidatedRequest } from "../../../shared/types/validated-request.type";
 import { extractDeviceInfo } from "../../../shared/utilities/extract-device-info.util";
 import { AuthResponseMessages } from "../constants";
 import { asyncHandler, sendSuccess } from "../helpers";
