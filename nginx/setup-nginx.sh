@@ -21,8 +21,13 @@ rm -f /etc/nginx/sites-enabled/default
 
 echo "==> Testing nginx config..."
 if nginx -t; then
-  echo "==> Reloading nginx..."
-  systemctl reload nginx
+  if systemctl is-active --quiet nginx; then
+    echo "==> Reloading nginx..."
+    systemctl reload nginx
+  else
+    echo "==> Starting nginx..."
+    systemctl start nginx
+  fi
   echo ""
   echo "  Nginx configured successfully!"
   echo "   Domain: upstride-api.bilalnsmuhammed.in"
