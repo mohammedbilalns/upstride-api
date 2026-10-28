@@ -36,22 +36,22 @@ flowchart TD
         Loki["Grafana Loki<br/>(pino-loki)"]
     end
 
-    WebClient -->|HTTPS / WSS| Nginx
-    Nginx -->|REST API Requests (Proxy Pass)| API
-    Nginx -->|WebSocket & WebRTC Signaling (/socket.io)| API
+    WebClient -->|HTTPS and WSS| Nginx
+    Nginx -->|REST API Requests| API
+    Nginx -->|WebSocket and WebRTC Signaling| API
 
-    API -->|Read / Write Documents| MongoDB
-    API -->|Session / OTP / Revocation / Whiteboard| RedisDB
+    API -->|Read and Write Documents| MongoDB
+    API -->|Session and Cache Store| RedisDB
     API -->|Push Jobs to Queues| RedisDB
-    API -->|Uploads / Presigned URLs| S3
+    API -->|Uploads and Presigned URLs| S3
     API -->|Create Checkout Sessions| Stripe
     API -->|Social Authentication| OAuth
     API -->|Structured JSON Logs| Loki
 
     Stripe -->|Webhook Events| API
 
-    Worker -->|Fetch & Process Jobs| RedisDB
-    Worker -->|Update Settlements / Bookings| MongoDB
+    Worker -->|Fetch and Process Jobs| RedisDB
+    Worker -->|Update Settlements and Bookings| MongoDB
     Worker -->|Send Emails| SMTP
     Worker -->|Send Push Notifications| WebPushSvc
     Worker -->|Upload PDF Receipts| S3
@@ -101,11 +101,11 @@ flowchart TD
     end
 
     LayerPresentation -->|Invokes| LayerApplication
-    LayerInfrastructure -->|Implements Ports & Interfaces| LayerApplication
+    LayerInfrastructure -->|Implements Ports and Interfaces| LayerApplication
     LayerApplication -->|Coordinates| LayerDomain
-    LayerMain -->|Assembles & Injects Dependencies| LayerPresentation
-    LayerMain -->|Assembles & Injects Dependencies| LayerApplication
-    LayerMain -->|Assembles & Injects Dependencies| LayerInfrastructure
+    LayerMain -->|Assembles and Injects Dependencies| LayerPresentation
+    LayerMain -->|Assembles and Injects Dependencies| LayerApplication
+    LayerMain -->|Assembles and Injects Dependencies| LayerInfrastructure
 ```
 
 ### 1. Domain Layer (`src/domain`)
