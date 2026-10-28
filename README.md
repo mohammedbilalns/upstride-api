@@ -1,4 +1,4 @@
-# Upstride Backend
+# Upstride
 
 [![Node.js Version](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen.svg)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)](https://www.typescriptlang.org/)
@@ -7,8 +7,11 @@
 [![Redis](https://img.shields.io/badge/Redis-7-red.svg)](https://redis.io/)
 [![BullMQ](https://img.shields.io/badge/BullMQ-5.8-orange.svg)](https://bullmq.io/)
 [![Socket.IO](https://img.shields.io/badge/Socket.IO-4.8-lightgrey.svg)](https://socket.io/)
+[![Frontend Repo](https://img.shields.io/badge/Frontend-Repository-blue?logo=github)](https://github.com/mohammedbilalns/upstride-frontend)
 
 Upstride is a scalable, enterprise-grade backend platform for 1-on-1 mentorship, session scheduling, and professional networking. Built with **Node.js**, **TypeScript**, **Express 5**, **MongoDB**, and **Redis**, it follows **Clean Architecture (Hexagonal / Ports and Adapters)** and an **Event-Driven Architecture**.
+
+> 🌐 **Client Repository:** Looking for the frontend? Visit [github.com/mohammedbilalns/upstride-frontend](https://github.com/mohammedbilalns/upstride-frontend).
 
 ---
 
